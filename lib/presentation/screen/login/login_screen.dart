@@ -68,7 +68,7 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               const SizedBox(height: 40),
               const FDText.headersH3(
-                text: "Selamat datang kembali!",
+                text: "Selamat datang kembali Adhi!",
                 color: AppColors.neutralBlack80,
               ),
               const SizedBox(height: 12),
