@@ -20,6 +20,27 @@ class FDText extends StatelessWidget {
       this.maxLines,
       this.color = AppColors.neutralBlack80})
       : super(key: key);
+
+  const FDText.headersH4(
+      {Key? key,
+      required this.text,
+      this.textStyle = AppTextStyles.headersH4,
+      this.textAlign,
+      this.overflow,
+      this.maxLines,
+      this.color = AppColors.neutralBlack80})
+      : super(key: key);
+
+  const FDText.headersH5(
+      {Key? key,
+      required this.text,
+      this.textStyle = AppTextStyles.headersH5,
+      this.textAlign,
+      this.overflow,
+      this.maxLines,
+      this.color = AppColors.neutralBlack80})
+      : super(key: key);
+
   const FDText.bodyP3(
       {Key? key,
       required this.text,
@@ -29,10 +50,61 @@ class FDText extends StatelessWidget {
       this.maxLines,
       this.color = AppColors.neutralBlack80})
       : super(key: key);
+
+  const FDText.bodyP4(
+      {Key? key,
+      required this.text,
+      this.textStyle = AppTextStyles.bodyP4,
+      this.textAlign,
+      this.overflow,
+      this.maxLines,
+      this.color = AppColors.neutralBlack80})
+      : super(key: key);
+
+  const FDText.bodyP5(
+      {Key? key,
+      required this.text,
+      this.textStyle = AppTextStyles.bodyP5,
+      this.textAlign,
+      this.overflow,
+      this.maxLines,
+      this.color = AppColors.neutralBlack80})
+      : super(key: key);
+
+  const FDText.bodyP2(
+      {Key? key,
+      required this.text,
+      this.textStyle = AppTextStyles.bodyP2,
+      this.textAlign,
+      this.overflow,
+      this.maxLines,
+      this.color = AppColors.neutralBlack80})
+      : super(key: key);
+
   const FDText.headersH6(
       {Key? key,
       required this.text,
       this.textStyle = AppTextStyles.headersH6,
+      this.textAlign,
+      this.overflow,
+      this.maxLines,
+      this.color = AppColors.neutralBlack80})
+      : super(key: key);
+
+  const FDText.headersH7(
+      {Key? key,
+      required this.text,
+      this.textStyle = AppTextStyles.headersH7,
+      this.textAlign,
+      this.overflow,
+      this.maxLines,
+      this.color = AppColors.neutralBlack80})
+      : super(key: key);
+
+  const FDText.onBoarding(
+      {Key? key,
+      required this.text,
+      this.textStyle = AppTextStyles.onBoarding,
       this.textAlign,
       this.overflow,
       this.maxLines,

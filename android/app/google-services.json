@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "488318907802",
+    "project_id": "finddy-98fee",
+    "storage_bucket": "finddy-98fee.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:488318907802:android:27839b7e8c83e9b6f97623",
+        "android_client_info": {
+          "package_name": "com.example.finddy"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "488318907802-f3i5fn0svbg9dcbu7jf2kqu5bkcg19nc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCoYwP7xAENRjTuZ5W1sTBkaTOz9yHi43Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "488318907802-f3i5fn0svbg9dcbu7jf2kqu5bkcg19nc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

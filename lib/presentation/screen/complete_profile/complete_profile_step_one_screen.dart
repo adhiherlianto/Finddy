@@ -7,7 +7,6 @@ import 'package:finddy/presentation/screen/widget/finddy_textfield.dart';
 import 'package:finddy/presentation/theme/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:step_progress_indicator/step_progress_indicator.dart';
 
 class CompleteProfileStepOneScreen extends StatefulWidget {
   const CompleteProfileStepOneScreen({Key? key}) : super(key: key);
@@ -22,20 +21,21 @@ class _CompleteProfileStepOneScreenState
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _perguruanTinggiController =
       TextEditingController();
-  final TextEditingController _locationController = TextEditingController();
   final TextEditingController _noTlpController = TextEditingController();
+
+  final List _lokasi = ["Bandung", "Jakarta"];
+  String? _selectedLocatation;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(0, 0, 0, 40),
-          child: Column(
-            children: [
-              const StepIndicator(currentStep: 1),
-              Container(
-                padding: const EdgeInsets.fromLTRB(24, 44, 24, 0),
+      body: Column(
+        children: [
+          const StepIndicator(currentStep: 1),
+          Expanded(
+            child: SingleChildScrollView(
+              child: Container(
+                padding: const EdgeInsets.fromLTRB(24, 44, 24, 20),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -91,11 +91,7 @@ class _CompleteProfileStepOneScreenState
                       color: AppColors.neutralBlack60,
                     ),
                     const SizedBox(height: 12),
-                    FDTextField.normal(
-                      hintText: "Pilih Kabupaten",
-                      textEditingController: _locationController,
-                      onChanged: (data) {},
-                    ),
+                    _dropDownLocation(_lokasi, _selectedLocatation),
                     const SizedBox(height: 24),
                     const FDText.headersH6(
                       text: "Kontak (No. Whatsapp)",
@@ -107,15 +103,50 @@ class _CompleteProfileStepOneScreenState
                       textEditingController: _noTlpController,
                       onChanged: (data) {},
                     ),
-                    SizedBox(height: 40),
-                    FDButton.primary(onPressed: () {}, text: "Lanjutkan"),
+                    const SizedBox(height: 40),
+                    FDButton.primary(
+                        onPressed: () {
+                          context.pushNamed(AppRoutes.nrCompleteProfileStep2);
+                        },
+                        text: "Lanjutkan"),
                   ],
                 ),
-              )
-            ],
+              ),
+            ),
           ),
-        ),
+        ],
       ),
     );
+  }
+
+  Widget _dropDownLocation(List items, String? value) {
+    return DropdownButtonFormField(
+        decoration: InputDecoration(
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(4),
+          ),
+          contentPadding:
+              const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+          filled: true,
+          fillColor: AppColors.neutralwhite,
+          focusedBorder: OutlineInputBorder(
+            borderSide:
+                const BorderSide(color: AppColors.neutralBlack20, width: 2),
+            borderRadius: BorderRadius.circular(4.0),
+          ),
+        ),
+        focusColor: Colors.transparent,
+        hint: const FDText.bodyP4(
+            text: "Pilih kabupaten/kota kamu", color: AppColors.neutralBlack20),
+        items: items
+            .map((e) =>
+                DropdownMenuItem(value: e, child: FDText.bodyP4(text: e)))
+            .toList(),
+        value: value,
+        onChanged: (value) {
+          setState(() {
+            _selectedLocatation = value as String;
+          });
+        });
   }
 }

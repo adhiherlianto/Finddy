@@ -8,13 +8,15 @@ class FDButton extends StatelessWidget {
   final String text;
   Color? backgroundColor;
   Color? textColor;
+  double? width;
 
   FDButton.primary(
       {Key? key,
       required this.onPressed,
       required this.text,
       this.backgroundColor = AppColors.primaryGreen,
-      this.textColor = AppColors.neutralwhite})
+      this.textColor = AppColors.neutralwhite,
+      this.width})
       : super(key: key);
 
   FDButton.secondary(
@@ -22,13 +24,14 @@ class FDButton extends StatelessWidget {
       required this.onPressed,
       required this.text,
       this.backgroundColor = AppColors.primaryLightBlue,
-      this.textColor = AppColors.primaryGreen})
+      this.textColor = AppColors.primaryGreen,
+      this.width})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: double.infinity,
+      width: width ?? double.infinity,
       height: 46,
       child: ElevatedButton(
           onPressed: onPressed,

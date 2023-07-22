@@ -79,6 +79,14 @@ class $AssetsImagesGen {
   AssetGenImage get background =>
       const AssetGenImage('assets/images/background.png');
 
+  /// File path: assets/images/background_home.png
+  AssetGenImage get backgroundHome =>
+      const AssetGenImage('assets/images/background_home.png');
+
+  /// File path: assets/images/empty_profile.png
+  AssetGenImage get emptyProfile =>
+      const AssetGenImage('assets/images/empty_profile.png');
+
   /// File path: assets/images/img_content.png
   AssetGenImage get imgContent =>
       const AssetGenImage('assets/images/img_content.png');
@@ -87,15 +95,42 @@ class $AssetsImagesGen {
   AssetGenImage get imgFindyLogo =>
       const AssetGenImage('assets/images/img_findy_logo.png');
 
+  /// File path: assets/images/onboarding_background.png
+  AssetGenImage get onboardingBackground =>
+      const AssetGenImage('assets/images/onboarding_background.png');
+
   /// File path: assets/images/profile.png
   AssetGenImage get profile => const AssetGenImage('assets/images/profile.png');
+
+  /// File path: assets/images/reason_1.png
+  AssetGenImage get reason1 =>
+      const AssetGenImage('assets/images/reason_1.png');
+
+  /// File path: assets/images/reason_2.png
+  AssetGenImage get reason2 =>
+      const AssetGenImage('assets/images/reason_2.png');
+
+  /// File path: assets/images/reason_3.png
+  AssetGenImage get reason3 =>
+      const AssetGenImage('assets/images/reason_3.png');
 
   /// File path: assets/images/send.png
   AssetGenImage get send => const AssetGenImage('assets/images/send.png');
 
   /// List of all assets
-  List<AssetGenImage> get values =>
-      [background, imgContent, imgFindyLogo, profile, send];
+  List<AssetGenImage> get values => [
+        background,
+        backgroundHome,
+        emptyProfile,
+        imgContent,
+        imgFindyLogo,
+        onboardingBackground,
+        profile,
+        reason1,
+        reason2,
+        reason3,
+        send
+      ];
 }
 
 class Assets {

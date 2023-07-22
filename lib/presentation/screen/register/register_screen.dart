@@ -1,9 +1,11 @@
 import 'package:finddy/presentation/navigation/app_routes.dart';
+import 'package:finddy/presentation/screen/register/cubit/register_cubit.dart';
 import 'package:finddy/presentation/screen/widget/finddy_button.dart';
 import 'package:finddy/presentation/screen/widget/finddy_text.dart';
 import 'package:finddy/presentation/screen/widget/finddy_textfield.dart';
 import 'package:finddy/presentation/theme/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -23,6 +25,15 @@ bool textfieldPw = false;
 bool textfielConfirmPw = false;
 
 class _RegisterScreenState extends State<RegisterScreen> {
+  @override
+  void dispose() {
+    _nameController.clear();
+    _emailController.clear();
+    _passwordController.clear();
+    _confirmPasswordController.clear();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -111,10 +122,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
               const SizedBox(height: 40),
               FDButton.primary(
                   onPressed: () {
-                    context.pushNamed(AppRoutes.nrCompleteProfileStep1);
+                    context.read<RegisterCubit>().registerUser(
+                        _emailController.text, _passwordController.text);
+                    // context.pushNamed(AppRoutes.nrHome);
                   },
                   text: "Registrasi"),
-              SizedBox(height: 60),
+              const SizedBox(height: 60),
               const Center(
                 child: FDText.bodyP3(
                   text: "Sudah punya akun?",

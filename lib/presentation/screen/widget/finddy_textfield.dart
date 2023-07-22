@@ -11,14 +11,16 @@ class FDTextField extends StatelessWidget {
   bool isVisible;
   VoidCallback? onPressed;
 
-  FDTextField.normal(
-      {Key? key,
-      required this.hintText,
-      required this.textEditingController,
-      this.onChanged,
-      this.isVisible = false,
-      this.typeTextField = TypeTextField.normal})
-      : super(key: key);
+  FDTextField.normal({
+    Key? key,
+    required this.hintText,
+    required this.textEditingController,
+    this.onChanged,
+    this.isVisible = false,
+    this.typeTextField = TypeTextField.normal,
+    this.icon,
+    this.onPressed,
+  }) : super(key: key);
 
   FDTextField.password(
       {Key? key,
@@ -43,22 +45,30 @@ class FDTextField extends StatelessWidget {
           hintText: hintText,
           hintStyle: const TextStyle(color: AppColors.neutralBlack20),
           filled: true,
-          fillColor: AppColors.lightWhite,
+          fillColor: AppColors.neutralwhite,
           contentPadding: const EdgeInsets.all(16),
           focusedBorder: OutlineInputBorder(
-            borderSide: const BorderSide(color: AppColors.primaryBlue),
+            borderSide:
+                const BorderSide(color: AppColors.neutralBlack20, width: 1),
             borderRadius: BorderRadius.circular(4.0),
           ),
           enabledBorder: OutlineInputBorder(
             borderSide:
-                const BorderSide(color: AppColors.neutralBlack20, width: 2),
+                const BorderSide(color: AppColors.neutralBlack20, width: 1),
             borderRadius: BorderRadius.circular(4.0),
           ),
           // suffixIcon: IconButton(onPressed: (){}, icon: icon!) ?? SizedBox.shrink()
-          suffixIcon: typeTextField == TypeTextField.normal
-              ? const SizedBox.shrink()
-              : IconButton(onPressed: onPressed, icon: icon!)),
+          suffixIcon: _buildIcon()),
     );
+  }
+
+  Widget _buildIcon() {
+    if (typeTextField == TypeTextField.password) {
+      return IconButton(onPressed: onPressed, icon: icon!);
+    } else if (typeTextField == TypeTextField.normal && icon != null) {
+      return IconButton(onPressed: onPressed, icon: icon!);
+    }
+    return const SizedBox.shrink();
   }
 }
 
