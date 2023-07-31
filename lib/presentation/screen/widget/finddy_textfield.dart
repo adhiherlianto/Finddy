@@ -9,6 +9,7 @@ class FDTextField extends StatelessWidget {
   final TypeTextField typeTextField;
   Widget? icon;
   bool isVisible;
+  bool isNumber;
   VoidCallback? onPressed;
 
   FDTextField.normal({
@@ -17,6 +18,7 @@ class FDTextField extends StatelessWidget {
     required this.textEditingController,
     this.onChanged,
     this.isVisible = false,
+    this.isNumber = false,
     this.typeTextField = TypeTextField.normal,
     this.icon,
     this.onPressed,
@@ -29,6 +31,7 @@ class FDTextField extends StatelessWidget {
       this.onChanged,
       required this.icon,
       required this.isVisible,
+      this.isNumber = false,
       this.typeTextField = TypeTextField.password,
       required this.onPressed})
       : super(key: key);
@@ -38,6 +41,7 @@ class FDTextField extends StatelessWidget {
     return TextFormField(
       controller: textEditingController,
       onChanged: onChanged,
+      keyboardType: isNumber ? TextInputType.number : TextInputType.text,
       //showhide input
       obscureText: isVisible,
       decoration: InputDecoration(

@@ -123,7 +123,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
               FDButton.primary(
                   onPressed: () {
                     context.read<RegisterCubit>().registerUser(
-                        _emailController.text, _passwordController.text);
+                        _emailController.text,
+                        _passwordController.text,
+                        _nameController.text);
                     // context.pushNamed(AppRoutes.nrHome);
                   },
                   text: "Registrasi"),

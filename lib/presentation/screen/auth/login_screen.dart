@@ -1,5 +1,5 @@
 import 'package:finddy/presentation/navigation/app_routes.dart';
-import 'package:finddy/presentation/screen/login/cubit/login_cubit.dart';
+import 'package:finddy/presentation/screen/auth/cubit/auth_cubit.dart';
 import 'package:finddy/presentation/screen/widget/finddy_button.dart';
 import 'package:finddy/presentation/screen/widget/finddy_logo.dart';
 import 'package:finddy/presentation/screen/widget/finddy_textfield.dart';
@@ -51,10 +51,21 @@ class _LoginLayoutState extends State<LoginLayout> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<LoginCubit, LoginState>(
+    return BlocListener<AuthCubit, AuthState>(
       listener: (context, state) {
         if (state is LoginSuccess) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Login Success'),
+            ),
+          );
           context.pushNamed(AppRoutes.nrHome);
+        } else if (state is LoginError) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(state.error),
+            ),
+          );
         }
       },
       child: Scaffold(
@@ -114,7 +125,7 @@ class _LoginLayoutState extends State<LoginLayout> {
                 const SizedBox(height: 40),
                 FDButton.primary(
                     onPressed: () {
-                      context.read<LoginCubit>().loginUser(
+                      context.read<AuthCubit>().loginUser(
                           _emailController.text, _passwordController.text);
                     },
                     text: "Login"),

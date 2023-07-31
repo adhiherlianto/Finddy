@@ -48,8 +48,8 @@ class _MessageScreenState extends State<MessageScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Row(
-                          children: const [
+                        const Row(
+                          children: [
                             FDText.bodyP3(text: "C. Ronaldo"),
                             Spacer(),
                             FDText.bodyP5(text: "13/02/2022"),

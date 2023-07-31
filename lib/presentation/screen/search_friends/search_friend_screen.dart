@@ -67,8 +67,8 @@ class _SearchFriendScreenState extends State<SearchFriendScreen> {
             icon: const Icon(Icons.search),
           ),
           const SizedBox(height: 12),
-          Row(
-            children: const [
+          const Row(
+            children: [
               Icon(FeatherIcons.book, size: 12, color: AppColors.neutralwhite),
               SizedBox(width: 6),
               FDText.bodyP4(
@@ -98,7 +98,7 @@ class _SearchFriendScreenState extends State<SearchFriendScreen> {
             ),
           ),
           const SizedBox(height: 12),
-          SizedBox(
+          const SizedBox(
             width: double.infinity,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
@@ -108,7 +108,7 @@ class _SearchFriendScreenState extends State<SearchFriendScreen> {
                     height: 20,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
-                      children: const [
+                      children: [
                         Icon(FeatherIcons.sliders,
                             size: 12, color: AppColors.neutralwhite),
                         SizedBox(width: 5),
@@ -118,13 +118,13 @@ class _SearchFriendScreenState extends State<SearchFriendScreen> {
                     ),
                   ),
                 ),
-                const SizedBox(width: 16),
+                SizedBox(width: 16),
                 Expanded(
                   child: SizedBox(
                     height: 20,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
-                      children: const [
+                      children: [
                         Icon(FeatherIcons.mapPin,
                             size: 12, color: AppColors.neutralwhite),
                         SizedBox(width: 5),
@@ -173,8 +173,8 @@ class _SearchFriendScreenState extends State<SearchFriendScreen> {
                 child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Row(
-                  children: const [
+                const Row(
+                  children: [
                     FDText.bodyP3(text: "C. Ronaldo"),
                     Spacer(),
                     Icon(
@@ -184,8 +184,8 @@ class _SearchFriendScreenState extends State<SearchFriendScreen> {
                     )
                   ],
                 ),
-                Row(
-                  children: const [
+                const Row(
+                  children: [
                     Icon(FeatherIcons.mapPin,
                         size: 12, color: AppColors.neutralBlack60),
                     SizedBox(width: 4),

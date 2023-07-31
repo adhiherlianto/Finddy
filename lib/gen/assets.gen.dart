@@ -117,6 +117,10 @@ class $AssetsImagesGen {
   /// File path: assets/images/send.png
   AssetGenImage get send => const AssetGenImage('assets/images/send.png');
 
+  /// File path: assets/images/splash_img.png
+  AssetGenImage get splashImg =>
+      const AssetGenImage('assets/images/splash_img.png');
+
   /// List of all assets
   List<AssetGenImage> get values => [
         background,
@@ -129,7 +133,8 @@ class $AssetsImagesGen {
         reason1,
         reason2,
         reason3,
-        send
+        send,
+        splashImg
       ];
 }
 

@@ -1,6 +1,9 @@
 import 'package:finddy/presentation/navigation/app_router.dart';
-import 'package:finddy/presentation/screen/login/cubit/login_cubit.dart';
+import 'package:finddy/presentation/screen/auth/cubit/auth_cubit.dart';
+import 'package:finddy/presentation/screen/complete_profile/cubit/complete_profile_cubit.dart';
+
 import 'package:finddy/presentation/screen/register/cubit/register_cubit.dart';
+import 'package:finddy/presentation/screen/splash/cubit/splash_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -19,24 +22,33 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider<LoginCubit>(create: (BuildContext context) {
-          return LoginCubit();
+        BlocProvider<AuthCubit>(create: (BuildContext context) {
+          return AuthCubit();
         }),
         BlocProvider<RegisterCubit>(create: (BuildContext context) {
           return RegisterCubit();
-        })
+        }),
+        BlocProvider<SplashCubit>(create: (BuildContext context) {
+          return SplashCubit();
+        }),
+        BlocProvider<CompleteProfileCubit>(create: (BuildContext context) {
+          return CompleteProfileCubit();
+        }),
       ],
-      child: MaterialApp.router(
-        debugShowCheckedModeBanner: false,
-        routeInformationProvider: fdGlobalRouter.routeInformationProvider,
-        routeInformationParser: fdGlobalRouter.routeInformationParser,
-        routerDelegate: fdGlobalRouter.routerDelegate,
-        theme: ThemeData(
-            pageTransitionsTheme: const PageTransitionsTheme(builders: {
-          TargetPlatform.android: FadeUpwardsPageTransitionsBuilder(),
-          TargetPlatform.iOS: FadeUpwardsPageTransitionsBuilder()
-        })),
-        title: "Finddy",
+      child: ScrollConfiguration(
+        behavior: const MaterialScrollBehavior().copyWith(overscroll: false),
+        child: MaterialApp.router(
+          debugShowCheckedModeBanner: false,
+          routeInformationProvider: fdGlobalRouter.routeInformationProvider,
+          routeInformationParser: fdGlobalRouter.routeInformationParser,
+          routerDelegate: fdGlobalRouter.routerDelegate,
+          theme: ThemeData(
+              pageTransitionsTheme: const PageTransitionsTheme(builders: {
+            TargetPlatform.android: FadeUpwardsPageTransitionsBuilder(),
+            TargetPlatform.iOS: FadeUpwardsPageTransitionsBuilder()
+          })),
+          title: "Finddy",
+        ),
       ),
     );
   }

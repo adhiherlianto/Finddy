@@ -1,18 +1,19 @@
 import 'package:finddy/globals.dart';
 import 'package:finddy/presentation/navigation/app_routes.dart';
+import 'package:finddy/presentation/screen/auth/login_screen.dart';
 import 'package:finddy/presentation/screen/complete_profile/complete_profile_step_one_screen.dart';
 import 'package:finddy/presentation/screen/complete_profile/complete_profile_step_three_screen.dart';
 import 'package:finddy/presentation/screen/complete_profile/complete_profile_step_two_screen.dart';
 import 'package:finddy/presentation/screen/detail_and_edit_profile/detail_profile_screen.dart';
 import 'package:finddy/presentation/screen/home/home_screen.dart';
-import 'package:finddy/presentation/screen/login/login_screen.dart';
 import 'package:finddy/presentation/screen/onboarding/onboarding_screen.dart';
 import 'package:finddy/presentation/screen/register/register_screen.dart';
+import 'package:finddy/presentation/screen/splash/splash_screen.dart';
 import 'package:go_router/go_router.dart';
 
 final GoRouter fdGlobalRouter = GoRouter(
     navigatorKey: AppGlobals.navigatorKey,
-    initialLocation: '/login',
+    initialLocation: '/splash',
     routes: [
       GoRoute(
         path: '/onboarding',
@@ -20,9 +21,14 @@ final GoRouter fdGlobalRouter = GoRouter(
         builder: (context, state) => const OnboardingScreen(),
       ),
       GoRoute(
+        path: '/splash',
+        name: AppRoutes.nrSplash,
+        builder: (context, state) => const SplashScreen(),
+      ),
+      GoRoute(
         path: '/login',
         name: AppRoutes.nrLogin,
-        builder: (context, state) => const LoginLayout(),
+        builder: (context, state) => const LoginScreen(),
       ),
       GoRoute(
         path: '/register',
@@ -42,7 +48,12 @@ final GoRouter fdGlobalRouter = GoRouter(
       GoRoute(
         path: '/complete-profile-step-2',
         name: AppRoutes.nrCompleteProfileStep2,
-        builder: (context, state) => const CompleteProfileStepTwoScreen(),
+        builder: (context, state) => CompleteProfileStepTwoScreen(
+          location: state.queryParameters["location"],
+          phone: state.queryParameters["phone"],
+          university: state.queryParameters["university"],
+          username: state.queryParameters["username"],
+        ),
       ),
       GoRoute(
         path: '/complete-profile-step-3',

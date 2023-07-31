@@ -10,7 +10,17 @@ import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:go_router/go_router.dart';
 
 class CompleteProfileStepTwoScreen extends StatefulWidget {
-  const CompleteProfileStepTwoScreen({Key? key}) : super(key: key);
+  final String? username;
+  final String? university;
+  final String? location;
+  final String? phone;
+  const CompleteProfileStepTwoScreen({
+    Key? key,
+    this.username,
+    this.university,
+    this.location,
+    this.phone,
+  }) : super(key: key);
 
   @override
   State<CompleteProfileStepTwoScreen> createState() =>
@@ -26,54 +36,58 @@ class _CompleteProfileStepTwoScreenState
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Column(
-        children: [
-          const StepIndicator(currentStep: 2),
-          Expanded(
-            child: SingleChildScrollView(
-              child: Container(
-                padding: const EdgeInsets.fromLTRB(24, 44, 24, 20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const FDText.headersH3(
-                        text: "Pilih bidang minatmu",
-                        color: AppColors.neutralBlack60),
-                    const SizedBox(height: 12),
-                    const FDText.bodyP3(
-                        text:
-                            "Pilih yang sesuai agar teman belajarmu mudah ketika menemukanmu",
-                        color: AppColors.neutralBlack60),
-                    const SizedBox(height: 28),
-                    FDTextField.normal(
-                      hintText: "Cari teman",
-                      textEditingController: _searchController,
-                      onPressed: () {},
-                      icon: const Icon(Icons.search,
-                          color: AppColors.neutralBlack20),
-                    ),
-                    const SizedBox(height: 54),
-                    _contentCard("Digital Marketing"),
-                    const SizedBox(height: 100),
-                    FDButton.primary(
+    return SafeArea(
+      child: Scaffold(
+        body: Column(
+          children: [
+            const StepIndicator(currentStep: 2),
+            Expanded(
+              child: SingleChildScrollView(
+                child: Container(
+                  padding: const EdgeInsets.fromLTRB(24, 44, 24, 20),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const FDText.headersH3(
+                          text: "Pilih bidang minatmu",
+                          color: AppColors.neutralBlack60),
+                      const SizedBox(height: 12),
+                      const FDText.bodyP3(
+                          text:
+                              "Pilih yang sesuai agar teman belajarmu mudah ketika menemukanmu",
+                          color: AppColors.neutralBlack60),
+                      const SizedBox(height: 28),
+                      FDTextField.normal(
+                        hintText: "Cari bidang/minat",
+                        textEditingController: _searchController,
                         onPressed: () {
-                          context.pushNamed(AppRoutes.nrCompleteProfileStep3);
+                          //filter by keyword
                         },
-                        text: "Lanjutkan"),
-                    const SizedBox(height: 12),
-                    FDButton.secondary(
-                        onPressed: () {
-                          context.pop();
-                        },
-                        text: "Kembali"),
-                    const SizedBox(height: 12),
-                  ],
+                        icon: const Icon(Icons.search,
+                            color: AppColors.neutralBlack20),
+                      ),
+                      const SizedBox(height: 54),
+                      _contentCard("Digital Marketing"),
+                      const SizedBox(height: 100),
+                      FDButton.primary(
+                          onPressed: () {
+                            context.pushNamed(AppRoutes.nrCompleteProfileStep3);
+                          },
+                          text: "Lanjutkan"),
+                      const SizedBox(height: 12),
+                      FDButton.secondary(
+                          onPressed: () {
+                            context.pop();
+                          },
+                          text: "Kembali"),
+                      const SizedBox(height: 12),
+                    ],
+                  ),
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
