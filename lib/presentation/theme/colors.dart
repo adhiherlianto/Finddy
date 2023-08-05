@@ -20,4 +20,5 @@ class AppColors {
   static const lightWhite = Color(0xffF5F5F5);
   static const calmWhite = Color(0xffF7FBFD);
   static const purple = Color(0xff8A2FFE);
+  static const error = Color(0xffff0033);
 }

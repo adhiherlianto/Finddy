@@ -7,6 +7,7 @@ import 'package:finddy/presentation/screen/widget/finddy_text.dart';
 import 'package:finddy/presentation/theme/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 // ignore: must_be_immutable
 class OnboardingScreen extends StatefulWidget {
@@ -136,7 +137,10 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       child: Row(
         children: [
           FDButton.secondary(
-            onPressed: () {
+            onPressed: () async {
+              final SharedPreferences prefs =
+                  await SharedPreferences.getInstance();
+              await prefs.setBool('check', true);
               context.pushNamed(AppRoutes.nrLogin);
             },
             text: "Lewati",
@@ -145,8 +149,11 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           const SizedBox(width: 16),
           Expanded(
               child: FDButton.primary(
-                  onPressed: () {
+                  onPressed: () async {
                     if (currentIndex == 2) {
+                      final SharedPreferences prefs =
+                          await SharedPreferences.getInstance();
+                      await prefs.setBool('check', true);
                       context.pushNamed(AppRoutes.nrLogin);
                     } else {
                       debugPrint('currentIndex : $currentIndex');

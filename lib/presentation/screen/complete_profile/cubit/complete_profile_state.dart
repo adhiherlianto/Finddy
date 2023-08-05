@@ -12,7 +12,7 @@ class CompleteProfileInitial extends CompleteProfileState {}
 class CompleteProfileLoading extends CompleteProfileState {}
 
 class CompleteProfileSuccess extends CompleteProfileState {
-  List<String> location;
+  List<LocationModel> location;
 
   CompleteProfileSuccess(this.location);
 

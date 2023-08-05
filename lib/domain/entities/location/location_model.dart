@@ -1,20 +1,15 @@
-import 'package:equatable/equatable.dart';
+import 'package:json_annotation/json_annotation.dart';
 
-class LocationModel extends Equatable {
-  final String id;
-  final String name;
+part 'location_model.g.dart';
 
-  const LocationModel({required this.id, required this.name});
+@JsonSerializable()
+class LocationModel {
+  final String id, name;
 
-  factory LocationModel.fromJson(Map<String, dynamic> json) {
-    return LocationModel(id: json['id'], name: json['name']);
-  }
+  LocationModel(this.id, this.name);
 
-  Map<String, dynamic> toJson() => {
-        'id': id,
-        'name': name,
-      };
+  factory LocationModel.fromJson(Map<String, dynamic> json) =>
+      _$LocationModelFromJson(json);
 
-  @override
-  List<Object?> get props => [id, name];
+  Map<String, dynamic> toJson() => _$LocationModelToJson(this);
 }

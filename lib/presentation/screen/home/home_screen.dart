@@ -27,27 +27,29 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: _pages[_selectedPageIndex]['pages'] as Widget,
-      bottomNavigationBar: BottomNavigationBar(
-          selectedItemColor: AppColors.primaryGreen,
-          unselectedItemColor: AppColors.neutralBlack60,
-          onTap: _selectPage,
-          currentIndex: _selectedPageIndex,
-          items: const [
-            BottomNavigationBarItem(
-              icon: Icon(Icons.home),
-              label: 'Home',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.search),
-              label: 'Cari teman',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(FeatherIcons.messageCircle),
-              label: 'Pesan',
-            ),
-          ]),
+    return SafeArea(
+      child: Scaffold(
+        body: _pages[_selectedPageIndex]['pages'] as Widget,
+        bottomNavigationBar: BottomNavigationBar(
+            selectedItemColor: AppColors.primaryGreen,
+            unselectedItemColor: AppColors.neutralBlack60,
+            onTap: _selectPage,
+            currentIndex: _selectedPageIndex,
+            items: const [
+              BottomNavigationBarItem(
+                icon: Icon(Icons.home),
+                label: 'Home',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.search),
+                label: 'Cari teman',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(FeatherIcons.messageCircle),
+                label: 'Pesan',
+              ),
+            ]),
+      ),
     );
   }
 }

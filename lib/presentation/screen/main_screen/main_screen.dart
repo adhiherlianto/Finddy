@@ -1,6 +1,8 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:finddy/gen/assets.gen.dart';
 import 'package:finddy/presentation/navigation/app_routes.dart';
 import 'package:finddy/presentation/screen/auth/cubit/auth_cubit.dart';
+import 'package:finddy/presentation/screen/widget/finddy_button.dart';
 import 'package:finddy/presentation/screen/widget/finddy_card.dart';
 import 'package:finddy/presentation/screen/widget/finddy_logo.dart';
 import 'package:finddy/presentation/screen/widget/finddy_text.dart';
@@ -71,7 +73,8 @@ class _MainScreenState extends State<MainScreen> {
                   //     )),
                   IconButton(
                     onPressed: () {
-                      context.read<AuthCubit>().LogoutUser();
+                      _popUpProfile();
+                      // context.read<AuthCubit>().LogoutUser();
                     },
                     icon: const Icon(FeatherIcons.menu),
                     iconSize: 32,
@@ -198,5 +201,84 @@ class _MainScreenState extends State<MainScreen> {
                         : AppColors.neutralBlack20),
               )),
     );
+  }
+
+  Future _popUpProfile() {
+    return showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (context) => AlertDialog(
+              insetPadding: EdgeInsets.zero,
+              alignment: Alignment.topCenter,
+              content: SizedBox(
+                height: 140,
+                width: 375,
+                child: Stack(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(top: 10),
+                      child: Column(
+                        children: [
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Image.asset(
+                                Assets.images.emptyProfile.path,
+                                width: 52,
+                                height: 52,
+                              ),
+                              const SizedBox(
+                                width: 12,
+                              ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const FDText.headersH7(
+                                      text: "Indra Kurniawan"),
+                                  const SizedBox(
+                                    height: 4,
+                                  ),
+                                  GestureDetector(
+                                    onTap: () {
+                                      context.pushNamed(
+                                          AppRoutes.nrDetailprofile,
+                                          extra: "detail");
+                                    },
+                                    child: const FDText.bodyP4(
+                                      text: "Halaman profile",
+                                      color: AppColors.purple,
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ],
+                          ),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          FDButton.secondary(
+                            onPressed: () {},
+                            text: "Keluar",
+                            width: 327,
+                          )
+                        ],
+                      ),
+                    ),
+                    Positioned(
+                      top: -10,
+                      right: 0,
+                      child: IconButton(
+                          onPressed: () {
+                            context.pop();
+                          },
+                          icon: const Icon(
+                            FeatherIcons.x,
+                            size: 32,
+                          )),
+                    ),
+                  ],
+                ),
+              ),
+            ));
   }
 }

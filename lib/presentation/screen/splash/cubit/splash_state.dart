@@ -13,4 +13,10 @@ class SplashLoading extends SplashState {}
 
 class SplashSuccess extends SplashState {}
 
-class SplashError extends SplashState {}
+class SplashError extends SplashState {
+  final bool check;
+
+  const SplashError(this.check);
+  @override
+  List<Object> get props => [];
+}

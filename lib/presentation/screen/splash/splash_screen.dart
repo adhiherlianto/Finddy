@@ -25,8 +25,10 @@ class _SplashScreenState extends State<SplashScreen> {
       listener: (context, state) {
         if (state is SplashSuccess) {
           context.goNamed(AppRoutes.nrHome);
-        } else if (state is SplashError) {
-          context.pushNamed(AppRoutes.nrLogin);
+        } else if (state is SplashError && state.check == false) {
+          context.goNamed(AppRoutes.nrOnBoarding);
+        } else {
+          context.goNamed(AppRoutes.nrLogin);
         }
       },
       child: Scaffold(

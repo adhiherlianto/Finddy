@@ -56,6 +56,7 @@ class _LoginLayoutState extends State<LoginLayout> {
         if (state is LoginSuccess) {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
+              backgroundColor: AppColors.primaryGreen,
               content: Text('Login Success'),
             ),
           );
@@ -63,6 +64,7 @@ class _LoginLayoutState extends State<LoginLayout> {
         } else if (state is LoginError) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
+              backgroundColor: AppColors.error,
               content: Text(state.error),
             ),
           );
