@@ -4,7 +4,8 @@ part 'user_interest_model.g.dart';
 
 @JsonSerializable()
 class UserInterestModel {
-  final String id, name, skill;
+  final String id, name;
+  String skill;
 
   UserInterestModel(this.id, this.name, this.skill);
 

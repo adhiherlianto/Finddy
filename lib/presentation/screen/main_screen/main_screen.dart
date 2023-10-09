@@ -1,12 +1,13 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:finddy/gen/assets.gen.dart';
 import 'package:finddy/presentation/navigation/app_routes.dart';
-import 'package:finddy/presentation/screen/auth/cubit/auth_cubit.dart';
+import 'package:finddy/presentation/screen/main_screen/cubit/user_cubit.dart';
 import 'package:finddy/presentation/screen/widget/finddy_button.dart';
 import 'package:finddy/presentation/screen/widget/finddy_card.dart';
 import 'package:finddy/presentation/screen/widget/finddy_logo.dart';
 import 'package:finddy/presentation/screen/widget/finddy_text.dart';
 import 'package:finddy/presentation/theme/colors.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
@@ -28,8 +29,15 @@ int currentIndex = 0;
 
 class _MainScreenState extends State<MainScreen> {
   @override
+  void initState() {
+    final userEmail = FirebaseAuth.instance.currentUser!.email;
+    context.read<UserCubit>().getUser(userEmail!);
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return BlocListener<AuthCubit, AuthState>(
+    return BlocListener<UserCubit, UserState>(
       listener: (context, state) {
         if (state is LogoutSuccess) {
           context.goNamed(AppRoutes.nrLogin);
@@ -257,7 +265,10 @@ class _MainScreenState extends State<MainScreen> {
                             height: 20,
                           ),
                           FDButton.secondary(
-                            onPressed: () {},
+                            onPressed: () {
+                              context.read<UserCubit>().LogoutUser();
+                              context.goNamed(AppRoutes.nrLogin);
+                            },
                             text: "Keluar",
                             width: 327,
                           )

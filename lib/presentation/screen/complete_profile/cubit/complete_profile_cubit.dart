@@ -6,17 +6,26 @@ import 'package:finddy/domain/repositories/location/location_repository.dart';
 part 'complete_profile_state.dart';
 
 class CompleteProfileCubit extends Cubit<CompleteProfileState> {
-  CompleteProfileCubit() : super(CompleteProfileInitial());
+  CompleteProfileCubit() : super(GetLocationInitial());
 
-  void getLocation() async {
-    emit(CompleteProfileLoading());
+  void getAllProvince() async {
+    emit(GetLocationLoading());
     try {
-      final data = await LocationRepository.get();
+      final data = await LocationRepository.getProvince();
 
-      emit(CompleteProfileSuccess(data));
-      print(data);
+      emit(GetProvinceSuccess(data));
     } catch (e) {
-      emit(CompleteProfileError());
+      emit(GetProvinceError());
+    }
+  }
+
+  void getLocation(String province) async {
+    emit(GetLocationLoading());
+    try {
+      final data = await LocationRepository.getCity(province);
+      emit(GetLocationSuccess(data));
+    } catch (e) {
+      emit(GetLocationError());
       print(e.toString());
     }
   }

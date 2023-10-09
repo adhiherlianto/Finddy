@@ -1,14 +1,20 @@
+import 'package:finddy/domain/entities/preference/preference_model.dart';
 import 'package:finddy/presentation/navigation/app_routes.dart';
+import 'package:finddy/presentation/screen/complete_profile/ParamScreenThree.dart';
+import 'package:finddy/presentation/screen/complete_profile/cubit/preference_cubit.dart';
 import 'package:finddy/presentation/screen/complete_profile/widget/step_indicator.dart';
 import 'package:finddy/presentation/screen/widget/finddy_button.dart';
 import 'package:finddy/presentation/screen/widget/finddy_card.dart';
 import 'package:finddy/presentation/screen/widget/finddy_text.dart';
 import 'package:finddy/presentation/theme/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 class CompleteProfileStepThreeScreen extends StatefulWidget {
-  const CompleteProfileStepThreeScreen({Key? key}) : super(key: key);
+  final ParamScreenThree? params;
+  const CompleteProfileStepThreeScreen({Key? key, this.params})
+      : super(key: key);
 
   @override
   State<CompleteProfileStepThreeScreen> createState() =>
@@ -17,78 +23,94 @@ class CompleteProfileStepThreeScreen extends StatefulWidget {
 
 class _CompleteProfileStepThreeScreenState
     extends State<CompleteProfileStepThreeScreen> {
-  List<Map<String, String>> data = [
-    {'id': '1', 'value': 'Mencari teman belajar untuk belajar bersama'},
-    {'id': '2', 'value': 'Mencari teman belajar sebagai mentor'},
-    {'id': '3', 'value': 'Mencari teman belajar untuk bertanya dan sharing'},
-    {'id': '4', 'value': 'Mencari teman belajar sebagai teman seperjuangan'}
-  ];
+  // List<Map<String, String>> data = [
+  //   {'id': '1', 'value': 'Mencari teman belajar untuk belajar bersama'},
+  //   {'id': '2', 'value': 'Mencari teman belajar sebagai mentor'},
+  //   {'id': '3', 'value': 'Mencari teman belajar untuk bertanya dan sharing'},
+  //   {'id': '4', 'value': 'Mencari teman belajar sebagai teman seperjuangan'}
+  // ];
 
-  List<String> preferensiTeman = [];
+  List<PreferenceModel> _dataPref = [];
+
+  List<PreferenceModel> preferensiTeman = [];
+  @override
+  void initState() {
+    context.read<PreferenceCubit>().getAllPref();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Column(
-        children: [
-          const StepIndicator(currentStep: 3),
-          Expanded(
-              child: SingleChildScrollView(
-            child: Container(
-              padding: const EdgeInsets.fromLTRB(24, 44, 24, 20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const FDText.headersH3(
-                      text: "Tentukan preferensi teman belajar",
-                      color: AppColors.neutralBlack60),
-                  const SizedBox(height: 12),
-                  const FDText.bodyP3(
-                      text:
-                          "Pilih beberapa kriteria berikut yang akan membantu proses pencarian teman belajarmu",
-                      color: AppColors.neutralBlack60),
-                  const SizedBox(height: 35),
-                  _customCheckBox(),
-                  const SizedBox(height: 100),
-                  FDButton.primary(
-                      onPressed: () {
-                        context.goNamed(AppRoutes.nrHome);
-                      },
-                      text: "Lanjutkan"),
-                  const SizedBox(height: 12),
-                  FDButton.secondary(
-                      onPressed: () {
-                        context.pop();
-                      },
-                      text: "Kembali"),
-                ],
+    return BlocListener<PreferenceCubit, PreferenceState>(
+      listener: (context, state) {
+        if (state is PreferenceSuccess) {
+          setState(() {
+            _dataPref = state.pref;
+          });
+        }
+      },
+      child: Scaffold(
+        body: Column(
+          children: [
+            const StepIndicator(currentStep: 3),
+            Expanded(
+                child: SingleChildScrollView(
+              child: Container(
+                padding: const EdgeInsets.fromLTRB(24, 44, 24, 20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const FDText.headersH3(
+                        text: "Tentukan preferensi teman belajar",
+                        color: AppColors.neutralBlack60),
+                    const SizedBox(height: 12),
+                    const FDText.bodyP3(
+                        text:
+                            "Pilih beberapa kriteria berikut yang akan membantu proses pencarian teman belajarmu",
+                        color: AppColors.neutralBlack60),
+                    const SizedBox(height: 35),
+                    _customCheckBox(),
+                    const SizedBox(height: 100),
+                    FDButton.primary(
+                        onPressed: () {
+                          context.goNamed(AppRoutes.nrHome);
+                        },
+                        text: "Lanjutkan"),
+                    const SizedBox(height: 12),
+                    FDButton.secondary(
+                        onPressed: () {
+                          context.pop();
+                        },
+                        text: "Kembali"),
+                  ],
+                ),
               ),
-            ),
-          ))
-        ],
+            ))
+          ],
+        ),
       ),
     );
   }
 
   Widget _customCheckBox() {
     return Column(
-      children: List.generate(data.length, (index) {
+      children: List.generate(_dataPref.length, (index) {
         return FDCard(
           margin: const EdgeInsets.only(bottom: 12),
           onPressed: () {
-            addOrReplace(data[index]['value']!);
+            addOrReplace(_dataPref[index].name, _dataPref[index].id);
           },
           borderRadius: BorderRadius.circular(8),
           padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
           child: Row(
             children: [
               Checkbox(
-                  value: isSelected(data[index]['value']!),
+                  value: isSelected(_dataPref[index].name),
                   onChanged: ((value) {
-                    addOrReplace(data[index]['value']!);
+                    addOrReplace(_dataPref[index].name, _dataPref[index].name);
                   })),
               const SizedBox(width: 15),
-              Expanded(child: FDText.bodyP2(text: data[index]['value']!))
+              Expanded(child: FDText.bodyP2(text: _dataPref[index].name))
             ],
           ),
         );
@@ -97,17 +119,22 @@ class _CompleteProfileStepThreeScreenState
   }
 
   bool isSelected(String title) {
-    return preferensiTeman.contains(title);
+    var contain = preferensiTeman.where((element) => element.name == title);
+    if (contain.isEmpty) {
+      return false;
+    } else {
+      return true;
+    }
   }
 
-  void addOrReplace(String title) {
+  void addOrReplace(String title, String id) {
     if (isSelected(title)) {
       setState(() {
-        preferensiTeman.remove(title);
+        preferensiTeman.removeWhere((element) => element.name == title);
       });
     } else {
       setState(() {
-        preferensiTeman.add(title);
+        preferensiTeman.add(PreferenceModel(id, title));
       });
     }
   }

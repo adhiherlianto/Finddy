@@ -5,11 +5,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 part 'auth_state.dart';
 
 class AuthCubit extends Cubit<AuthState> {
-  AuthCubit() : super(LoginInitial());
+  AuthCubit() : super(AuthInitial());
 
   void loginUser(String email, String password) async {
-    print('email: $email, $password');
-
     emit(LoginLoading());
     try {
       await FirebaseAuth.instance
@@ -17,24 +15,13 @@ class AuthCubit extends Cubit<AuthState> {
       emit(LoginSuccess());
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
-        emit(LoginError('No user found for that email.'));
-        print('No user found for that email.');
+        emit(const LoginError('No user found for that email.'));
       } else if (e.code == 'wrong-password') {
-        emit(LoginError('Wrong password provided for that user.'));
-        print('Wrong password provided for that user.');
+        emit(const LoginError('Wrong password provided for that user.'));
       }
     } catch (e) {
       emit(LoginError(e.toString()));
       print(e);
-    }
-  }
-
-  void LogoutUser() async {
-    try {
-      await FirebaseAuth.instance.signOut();
-      emit(LogoutSuccess());
-    } catch (e) {
-      emit(LoginError(e.toString()));
     }
   }
 }

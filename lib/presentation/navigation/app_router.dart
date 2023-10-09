@@ -1,6 +1,8 @@
 import 'package:finddy/globals.dart';
 import 'package:finddy/presentation/navigation/app_routes.dart';
 import 'package:finddy/presentation/screen/auth/login_screen.dart';
+import 'package:finddy/presentation/screen/complete_profile/ParamScreenThree.dart';
+import 'package:finddy/presentation/screen/complete_profile/ParamScreenTwo.dart';
 import 'package:finddy/presentation/screen/complete_profile/complete_profile_step_one_screen.dart';
 import 'package:finddy/presentation/screen/complete_profile/complete_profile_step_three_screen.dart';
 import 'package:finddy/presentation/screen/complete_profile/complete_profile_step_two_screen.dart';
@@ -48,17 +50,18 @@ final GoRouter fdGlobalRouter = GoRouter(
       GoRoute(
         path: '/complete-profile-step-2',
         name: AppRoutes.nrCompleteProfileStep2,
-        builder: (context, state) => CompleteProfileStepTwoScreen(
-          location: state.queryParameters["location"],
-          phone: state.queryParameters["phone"],
-          university: state.queryParameters["university"],
-          username: state.queryParameters["username"],
-        ),
+        builder: (context, state) {
+          ParamScreenTwo params = state.extra as ParamScreenTwo;
+          return CompleteProfileStepTwoScreen(params: params);
+        },
       ),
       GoRoute(
         path: '/complete-profile-step-3',
         name: AppRoutes.nrCompleteProfileStep3,
-        builder: (context, state) => const CompleteProfileStepThreeScreen(),
+        builder: (context, state) {
+          ParamScreenThree params = state.extra as ParamScreenThree;
+          return CompleteProfileStepThreeScreen(params: params);
+        },
       ),
       GoRoute(
         path: '/detail-profile',
