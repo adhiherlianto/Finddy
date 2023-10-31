@@ -21,3 +21,17 @@ class PreferenceSuccess extends PreferenceState {
 }
 
 class PreferenceError extends PreferenceState {}
+
+class UpdateUserInitial extends PreferenceState {}
+
+class UpdateUserLoading extends PreferenceState {}
+
+class UpdateUserSuccess extends PreferenceState {}
+
+class UpdateUserError extends PreferenceState {
+  final String error;
+
+  const UpdateUserError(this.error);
+  @override
+  List<Object> get props => [];
+}

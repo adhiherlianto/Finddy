@@ -6,6 +6,7 @@ import 'package:finddy/presentation/screen/complete_profile/cubit/preference_cub
 import 'package:finddy/presentation/screen/main_screen/cubit/user_cubit.dart';
 
 import 'package:finddy/presentation/screen/register/cubit/register_cubit.dart';
+import 'package:finddy/presentation/screen/search_friends/cubit/search_friend_cubit_cubit.dart';
 import 'package:finddy/presentation/screen/splash/cubit/splash_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -45,6 +46,9 @@ class MyApp extends StatelessWidget {
         }),
         BlocProvider<UserCubit>(create: (BuildContext context) {
           return UserCubit();
+        }),
+        BlocProvider<SearchFriendCubit>(create: (BuildContext context) {
+          return SearchFriendCubit();
         }),
       ],
       child: ScrollConfiguration(

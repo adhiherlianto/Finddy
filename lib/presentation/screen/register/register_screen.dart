@@ -45,7 +45,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               content: Text('Register Success'),
             ),
           );
-          context.pushNamed(AppRoutes.nrLogin);
+          context.goNamed(AppRoutes.nrHome);
         } else if (state is RegisterError) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
@@ -145,7 +145,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           _emailController.text,
                           _passwordController.text,
                           _nameController.text);
-                      // context.pushNamed(AppRoutes.nrHome);
                     },
                     text: "Registrasi"),
                 const SizedBox(height: 60),

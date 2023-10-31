@@ -60,7 +60,7 @@ class _LoginLayoutState extends State<LoginLayout> {
               content: Text('Login Success'),
             ),
           );
-          context.pushNamed(AppRoutes.nrHome);
+          context.goNamed(AppRoutes.nrHome);
         } else if (state is LoginError) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
@@ -81,7 +81,7 @@ class _LoginLayoutState extends State<LoginLayout> {
                 FinddyLogo(size: 40.0),
                 const SizedBox(height: 40),
                 const FDText.headersH3(
-                  text: "initial",
+                  text: "Selamat datang kembali!",
                   color: AppColors.neutralBlack80,
                 ),
                 const SizedBox(height: 12),

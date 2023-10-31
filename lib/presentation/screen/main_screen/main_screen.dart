@@ -1,4 +1,5 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:finddy/domain/entities/user/user_model.dart';
 import 'package:finddy/gen/assets.gen.dart';
 import 'package:finddy/presentation/navigation/app_routes.dart';
 import 'package:finddy/presentation/screen/main_screen/cubit/user_cubit.dart';
@@ -26,18 +27,25 @@ const data = [
   'Lorem ipsum dolor amet sit vanarana lost valley3'
 ];
 int currentIndex = 0;
+UserModel currentUser = const UserModel();
 
 class _MainScreenState extends State<MainScreen> {
   @override
   void initState() {
-    final userEmail = FirebaseAuth.instance.currentUser!.email;
-    context.read<UserCubit>().getUser(userEmail!);
+    Future.delayed(
+      const Duration(seconds: 1),
+      () {
+        final userEmail = FirebaseAuth.instance.currentUser!.email;
+        context.read<UserCubit>().getUser(userEmail!);
+      },
+    );
+
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<UserCubit, UserState>(
+    return BlocConsumer<UserCubit, UserState>(
       listener: (context, state) {
         if (state is LogoutSuccess) {
           context.goNamed(AppRoutes.nrLogin);
@@ -47,9 +55,11 @@ class _MainScreenState extends State<MainScreen> {
               content: Text(state.error),
             ),
           );
+        } else if (state is UserSuccess) {
+          currentUser = state.user;
         }
       },
-      child: Container(
+      builder: (context, state) => Container(
         width: double.infinity,
         height: double.infinity,
         padding: const EdgeInsets.all(24),
@@ -117,7 +127,9 @@ class _MainScreenState extends State<MainScreen> {
                       _dotIndicator(),
                     ],
                   )),
-              _firstContent()
+              currentUser.isVerified == true
+                  ? const Text("Sudah Verif")
+                  : _firstContent()
             ],
           ),
         ),

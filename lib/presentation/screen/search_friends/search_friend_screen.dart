@@ -1,3 +1,6 @@
+import 'package:finddy/domain/entities/user/user_model.dart';
+import 'package:finddy/presentation/screen/main_screen/cubit/user_cubit.dart';
+import 'package:finddy/presentation/screen/search_friends/cubit/search_friend_cubit_cubit.dart';
 import 'package:finddy/presentation/screen/widget/finddy_card.dart';
 import 'package:finddy/presentation/screen/widget/finddy_chip.dart';
 import 'package:finddy/presentation/screen/widget/finddy_logo.dart';
@@ -5,7 +8,9 @@ import 'package:finddy/presentation/screen/widget/finddy_profile_picture.dart';
 import 'package:finddy/presentation/screen/widget/finddy_text.dart';
 import 'package:finddy/presentation/screen/widget/finddy_textfield.dart';
 import 'package:finddy/presentation/theme/colors.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 
 class SearchFriendScreen extends StatefulWidget {
@@ -16,29 +21,80 @@ class SearchFriendScreen extends StatefulWidget {
 }
 
 class _SearchFriendScreenState extends State<SearchFriendScreen> {
+  @override
+  void dispose() {
+    _searchController.clear();
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    final userEmail = FirebaseAuth.instance.currentUser!.email;
+    context.read<UserCubit>().getUser(userEmail!);
+    context.read<SearchFriendCubit>().getAllUser();
+    super.initState();
+  }
+
+  List<UserModel> alluser = [];
+  String? name;
+  UserModel currentUser = const UserModel();
+
   final TextEditingController _searchController = TextEditingController();
 
-  List<String> data = ['Semua', 'UI/UX', 'Frontend Dev.'];
+  List<dynamic> bMinat = ['Semua'];
   int _selectedStatus = 0;
 
-  final List _kemampuanData = ["Pemula", "Expert"];
-  final List _lokasi = ["Bandung", "Jakarta"];
+  final List _kemampuanData = ["Semua", "Pemula", "Menengah", "Master"];
+  final List _lokasi = ["Semua Lokasi", "Lokasiku"];
+  String idLokasi = "";
 
   String? _valkemampuanData;
   String? _valLokasi;
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      body: SingleChildScrollView(
-        child: SizedBox(
-            width: double.infinity,
-            child:
-                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              _topSide(),
-              _bottomSide(),
-            ])),
+    return MultiBlocListener(
+      listeners: [
+        BlocListener<SearchFriendCubit, SearchFriendCubitState>(
+            listener: (context, state) {
+          if (state is SearchFriendCubitSuccess) {
+            setState(() {
+              alluser = state.allUser;
+            });
+          }
+        }),
+        BlocListener<UserCubit, UserState>(
+          listener: (context, state) {
+            if (state is UserSuccess) {
+              bMinat.removeWhere((element) => element != "Semua");
+              final listMinat =
+                  List.from(state.user.interest!.map((e) => e.name));
+              setState(() {
+                bMinat.addAll(listMinat);
+                idLokasi = state.user.location!.locationId;
+                print(idLokasi);
+              });
+            }
+          },
+        )
+      ],
+      child: Scaffold(
+        resizeToAvoidBottomInset: false,
+        body: SingleChildScrollView(
+          child: SizedBox(
+              width: double.infinity,
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _topSide(),
+                    ListView.builder(
+                      shrinkWrap: true,
+                      itemBuilder: (context, index) => _bottomSide(
+                          alluser[index].name!, alluser[index].location!.city),
+                      itemCount: alluser.length,
+                    ),
+                  ])),
+        ),
       ),
     );
   }
@@ -63,7 +119,12 @@ class _SearchFriendScreenState extends State<SearchFriendScreen> {
           FDTextField.normal(
             hintText: "Cari teman",
             textEditingController: _searchController,
-            onPressed: () {},
+            onChanged: (value) {
+              setState(() {
+                name = value;
+                context.read<SearchFriendCubit>().getNameSearch(name);
+              });
+            },
             icon: const Icon(Icons.search),
           ),
           const SizedBox(height: 12),
@@ -80,7 +141,7 @@ class _SearchFriendScreenState extends State<SearchFriendScreen> {
           const SizedBox(height: 4),
           Row(
             children: List.generate(
-              data.length,
+              bMinat.length,
               (index) => FDChip.action(
                 onPressed: () {
                   setState(() {
@@ -90,7 +151,7 @@ class _SearchFriendScreenState extends State<SearchFriendScreen> {
                 selectedIndex: _selectedStatus == index,
                 color: AppColors.thirdLightBlue,
                 height: 29,
-                title: data[index],
+                title: bMinat[index],
                 textColor: Colors.black,
                 padding:
                     const EdgeInsets.symmetric(vertical: 8, horizontal: 10),
@@ -152,7 +213,7 @@ class _SearchFriendScreenState extends State<SearchFriendScreen> {
     );
   }
 
-  Widget _bottomSide() {
+  Widget _bottomSide(String name, String location) {
     return Container(
       color: AppColors.neutralwhite,
       width: double.infinity,
@@ -173,24 +234,24 @@ class _SearchFriendScreenState extends State<SearchFriendScreen> {
                 child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Row(
+                Row(
                   children: [
-                    FDText.bodyP3(text: "C. Ronaldo"),
-                    Spacer(),
-                    Icon(
+                    FDText.bodyP3(text: name),
+                    const Spacer(),
+                    const Icon(
                       Icons.bookmark,
                       size: 16,
                       color: AppColors.primaryGreen,
                     )
                   ],
                 ),
-                const Row(
+                Row(
                   children: [
-                    Icon(FeatherIcons.mapPin,
+                    const Icon(FeatherIcons.mapPin,
                         size: 12, color: AppColors.neutralBlack60),
-                    SizedBox(width: 4),
+                    const SizedBox(width: 4),
                     FDText.bodyP4(
-                        text: "Kuningan", color: AppColors.neutralBlack60),
+                        text: location, color: AppColors.neutralBlack60),
                   ],
                 ),
                 const SizedBox(height: 8),
@@ -230,10 +291,24 @@ class _SearchFriendScreenState extends State<SearchFriendScreen> {
           if (type == 'kemampuan') {
             setState(() {
               _valkemampuanData = value as String;
+              print(_valkemampuanData);
+              if (_valkemampuanData == "Semua") {
+                context.read<SearchFriendCubit>().getAllUser();
+              } else {
+                context
+                    .read<SearchFriendCubit>()
+                    .getSkillSearch(_valkemampuanData);
+              }
             });
           } else {
             setState(() {
               _valLokasi = value as String;
+              print(_valLokasi);
+              if (_valLokasi == "Lokasiku") {
+                context.read<SearchFriendCubit>().getLocationSearch(idLokasi);
+              } else {
+                context.read<SearchFriendCubit>().getAllUser();
+              }
             });
           }
         });

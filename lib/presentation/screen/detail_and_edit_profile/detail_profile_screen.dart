@@ -40,27 +40,27 @@ class _DetailProfileScreenState extends State<DetailProfileScreen> {
   }
 
   Widget _detailProfile() {
-    return Center(
+    return const Center(
       child: Column(
         children: [
-          const SizedBox(height: 30),
-          const FDProfilePicture(
+          SizedBox(height: 30),
+          FDProfilePicture(
             size: 100,
             data:
                 'https://assets.goal.com/v3/assets/bltcc7a7ffd2fbf71f5/blt943c9f051f0087c0/639f1d7d03c7a66c44782060/GettyImages-1245184407.jpg?auto=webp&format=pjpg&width=3840&quality=60',
           ),
-          const FDText.headersH5(text: 'Rian Febriansyah'),
-          const FDText.bodyP4(text: '@rian'),
-          const SizedBox(height: 4),
+          FDText.headersH5(text: 'Indra Kurniawan'),
+          FDText.bodyP4(text: '@ik260501'),
+          SizedBox(height: 4),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: const [
+            children: [
               Icon(Icons.school, size: 16),
               SizedBox(width: 4),
               FDText.bodyP4(text: 'Universitas Padjadjaran')
             ],
           ),
-          const SizedBox(height: 32)
+          SizedBox(height: 32)
         ],
       ),
     );
@@ -129,12 +129,12 @@ class _DetailProfileScreenState extends State<DetailProfileScreen> {
         FDCard(
             padding: const EdgeInsets.all(12),
             borderRadius: BorderRadius.circular(8),
-            child: Column(
+            child: const Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
-                  children: const [
+                  children: [
                     Icon(FeatherIcons.mapPin,
                         size: 16, color: AppColors.primaryGreen),
                     SizedBox(width: 4),
@@ -144,8 +144,8 @@ class _DetailProfileScreenState extends State<DetailProfileScreen> {
                     ),
                   ],
                 ),
-                const SizedBox(height: 8),
-                const FDText.bodyP4(text: 'Jawa Barat')
+                SizedBox(height: 8),
+                FDText.bodyP4(text: 'Jawa Barat')
               ],
             ))
       ],
@@ -162,9 +162,9 @@ class _DetailProfileScreenState extends State<DetailProfileScreen> {
         FDCard(
             padding: const EdgeInsets.all(12),
             borderRadius: BorderRadius.circular(8),
-            child: Column(
+            child: const Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: const [
+              children: [
                 FDText.bodyP4(text: '1. Teman belajar untuk belajar bersama')
               ],
             ))

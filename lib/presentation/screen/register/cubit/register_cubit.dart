@@ -11,10 +11,11 @@ class RegisterCubit extends Cubit<RegisterState> {
   void registerUser(String email, String password, String name) async {
     emit(RegisterLoading());
     try {
-      await FirebaseAuth.instance
+      final data = await FirebaseAuth.instance
           .createUserWithEmailAndPassword(email: email, password: password);
+      print("uid : ${data.user!.uid}");
       await UserRepository.createUser(
-          email: email, isVerified: false, name: name);
+          email: email, isVerified: false, name: name, docId: data.user!.uid);
       emit(RegisterSuccess());
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {

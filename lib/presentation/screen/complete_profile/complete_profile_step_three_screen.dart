@@ -1,5 +1,4 @@
 import 'package:finddy/domain/entities/preference/preference_model.dart';
-import 'package:finddy/presentation/navigation/app_routes.dart';
 import 'package:finddy/presentation/screen/complete_profile/ParamScreenThree.dart';
 import 'package:finddy/presentation/screen/complete_profile/cubit/preference_cubit.dart';
 import 'package:finddy/presentation/screen/complete_profile/widget/step_indicator.dart';
@@ -7,6 +6,7 @@ import 'package:finddy/presentation/screen/widget/finddy_button.dart';
 import 'package:finddy/presentation/screen/widget/finddy_card.dart';
 import 'package:finddy/presentation/screen/widget/finddy_text.dart';
 import 'package:finddy/presentation/theme/colors.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -73,7 +73,37 @@ class _CompleteProfileStepThreeScreenState
                     const SizedBox(height: 100),
                     FDButton.primary(
                         onPressed: () {
-                          context.goNamed(AppRoutes.nrHome);
+                          final userData = FirebaseAuth.instance.currentUser;
+                          final interest = [];
+                          for (var i = 0;
+                              i < widget.params!.userInterest.length;
+                              i++) {
+                            interest.add({
+                              "id": widget.params!.userInterest[i].id,
+                              "name": widget.params!.userInterest[i].name,
+                              "skill": widget.params!.userInterest[i].skill,
+                            });
+                          }
+
+                          final pref = [];
+                          for (var i = 0; i < _dataPref.length; i++) {
+                            pref.add({
+                              "id": _dataPref[i].id,
+                              "name": _dataPref[i].name
+                            });
+                          }
+                          context.read<PreferenceCubit>().upadateUser(
+                              userData!.uid,
+                              widget.params!.phone!,
+                              widget.params!.photo!,
+                              widget.params!.university!,
+                              widget.params!.username!,
+                              interest,
+                              pref,
+                              widget.params!.location!);
+                          print(_dataPref.length);
+                          print(interest);
+                          // context.goNamed(AppRoutes.nrHome);
                         },
                         text: "Lanjutkan"),
                     const SizedBox(height: 12),

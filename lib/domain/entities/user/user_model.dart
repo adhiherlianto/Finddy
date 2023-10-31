@@ -1,33 +1,3 @@
-// import 'package:equatable/equatable.dart';
-
-// class UserModel extends Equatable {
-//   final bool isVerified;
-//   final String email;
-//   final String? locationId;
-//   final String? name;
-//   final String? phone;
-//   final String? photo;
-//   final String? university;
-//   final String? username;
-
-//   const UserModel(
-//       {required this.isVerified,
-//       required this.email,
-//       this.locationId,
-//       this.name,
-//       this.phone,
-//       this.photo,
-//       this.university,
-//       this.username});
-
-//   @override
-//   List<Object?> get props =>
-//       [isVerified, email, locationId, name, phone, photo, university, username];
-// }
-
-import 'package:finddy/domain/entities/location/user_location_model.dart';
-import 'package:finddy/domain/entities/preference/preference_model.dart';
-import 'package:finddy/domain/entities/user_interest/user_interest_model.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'user_model.g.dart';
@@ -41,9 +11,9 @@ class UserModel {
   final String? photo;
   final String? university;
   final String? username;
-  final UserLocationModel? location;
-  final List<PreferenceModel>? pref;
-  final List<UserInterestModel>? interest;
+  final Location? location;
+  final List<Pref>? pref;
+  final List<Interest>? interest;
 
   const UserModel(
       {this.isVerified,
@@ -61,4 +31,55 @@ class UserModel {
       _$UserModelFromJson(json);
 
   Map<String, dynamic> toJson() => _$UserModelToJson(this);
+}
+
+@JsonSerializable(explicitToJson: true)
+class Interest {
+  String id;
+  String name;
+  String skill;
+
+  Interest({
+    required this.id,
+    required this.name,
+    required this.skill,
+  });
+
+  factory Interest.fromJson(Map<String, dynamic> json) =>
+      _$InterestFromJson(json);
+
+  Map<String, dynamic> toJson() => _$InterestToJson(this);
+}
+
+@JsonSerializable(explicitToJson: true)
+class Location {
+  String city;
+  String locationId;
+  String province;
+
+  Location({
+    required this.city,
+    required this.locationId,
+    required this.province,
+  });
+
+  factory Location.fromJson(Map<String, dynamic> json) =>
+      _$LocationFromJson(json);
+
+  Map<String, dynamic> toJson() => _$LocationToJson(this);
+}
+
+@JsonSerializable(explicitToJson: true)
+class Pref {
+  String id;
+  String name;
+
+  Pref({
+    required this.id,
+    required this.name,
+  });
+
+  factory Pref.fromJson(Map<String, dynamic> json) => _$PrefFromJson(json);
+
+  Map<String, dynamic> toJson() => _$PrefToJson(this);
 }

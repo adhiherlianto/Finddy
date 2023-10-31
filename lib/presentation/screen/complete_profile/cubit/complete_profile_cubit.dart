@@ -12,7 +12,6 @@ class CompleteProfileCubit extends Cubit<CompleteProfileState> {
     emit(GetLocationLoading());
     try {
       final data = await LocationRepository.getProvince();
-
       emit(GetProvinceSuccess(data));
     } catch (e) {
       emit(GetProvinceError());

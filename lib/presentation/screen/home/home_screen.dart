@@ -13,6 +13,11 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
   final List<Map<String, Object>> _pages = [
     {'pages': const MainScreen(), 'title': 'Beranda'},
     {'pages': const SearchFriendScreen(), 'title': 'Cari Teman'},

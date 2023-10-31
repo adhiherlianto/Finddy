@@ -25,3 +25,13 @@ class UserError extends UserState {
   @override
   List<Object> get props => [error];
 }
+
+class LogoutSuccess extends UserState {}
+
+class LogoutError extends UserState {
+  final String error;
+
+  const LogoutError(this.error);
+  @override
+  List<Object> get props => [error];
+}

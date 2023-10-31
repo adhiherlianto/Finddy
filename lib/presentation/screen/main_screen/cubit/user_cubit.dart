@@ -8,23 +8,22 @@ part 'user_state.dart';
 
 class UserCubit extends Cubit<UserState> {
   UserCubit() : super(UserInitial());
+  void getUser(String email) async {
+    emit(UserLoading());
+    try {
+      final user = await UserRepository.getUser(email);
+      emit(UserSuccess(user));
+    } catch (e) {
+      emit(UserError(e.toString()));
+    }
+  }
+
   void LogoutUser() async {
     try {
       await FirebaseAuth.instance.signOut();
       emit(LogoutSuccess());
     } catch (e) {
       emit(LogoutError(e.toString()));
-    }
-  }
-
-  void getUser(String email) async {
-    emit(UserLoading());
-    try {
-      final user = await UserRepository.getUser(email);
-
-      emit(UserSuccess(user));
-    } catch (e) {
-      emit(UserError(e.toString()));
     }
   }
 }
