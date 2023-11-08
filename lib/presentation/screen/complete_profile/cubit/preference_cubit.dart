@@ -28,6 +28,7 @@ class PreferenceCubit extends Cubit<PreferenceState> {
     List<dynamic> interest,
     List<dynamic> pref,
     Map<String, String> location,
+    List<String> interestSkill,
   ) async {
     emit(UpdateUserLoading());
     try {
@@ -40,7 +41,8 @@ class PreferenceCubit extends Cubit<PreferenceState> {
           username: username,
           interest: interest,
           pref: pref,
-          location: location);
+          location: location,
+          interestSkill: interestSkill);
       emit(UpdateUserSuccess());
     } catch (e) {
       emit(UpdateUserError(e.toString()));

@@ -33,6 +33,7 @@ class _CompleteProfileStepTwoScreenState
   final List _kemampuanData = ["Pemula", "Menengah", "Master"];
   List<InterestModel> _listInterest = [];
   final List<UserInterestModel> _userInterest = [];
+  final List<String> _interestSkill = [];
   String? a;
 
   @override
@@ -95,7 +96,7 @@ class _CompleteProfileStepTwoScreenState
                           onChanged: (value) {
                             if (_listInterest.length < 3) {
                               final UserInterestModel interestValue =
-                                  UserInterestModel(value!.id, value.name, "");
+                                  UserInterestModel(value!.id, value.name);
                               setState(() {
                                 _userInterest.add(interestValue);
                               });
@@ -123,6 +124,7 @@ class _CompleteProfileStepTwoScreenState
                                 university: widget.params!.university,
                                 userInterest: _userInterest,
                                 username: widget.params!.username,
+                                interestSkill: _interestSkill,
                               );
                               context.pushNamed(
                                   AppRoutes.nrCompleteProfileStep3,
@@ -162,6 +164,7 @@ class _CompleteProfileStepTwoScreenState
               FDText.headersH5(text: title, color: AppColors.primaryGreen),
               IconButton(
                   onPressed: () {
+                    // final index = _userInterest.
                     setState(() {
                       _userInterest
                           .removeWhere((element) => element.name == title);
@@ -206,8 +209,7 @@ class _CompleteProfileStepTwoScreenState
             .toList(),
         value: value,
         onChanged: (value) {
-          final check = _userInterest.firstWhere((item) => item.id == id);
-          check.skill = value.toString();
+          _interestSkill.add(value.toString());
         });
   }
 }

@@ -23,6 +23,9 @@ UserModel _$UserModelFromJson(Map<String, dynamic> json) => UserModel(
       interest: (json['interest'] as List<dynamic>?)
           ?.map((e) => Interest.fromJson(e as Map<String, dynamic>))
           .toList(),
+      interestSkill: (json['interestSkill'] as List<dynamic>?)
+          ?.map((e) => e as String)
+          .toList(),
     );
 
 Map<String, dynamic> _$UserModelToJson(UserModel instance) => <String, dynamic>{
@@ -36,18 +39,17 @@ Map<String, dynamic> _$UserModelToJson(UserModel instance) => <String, dynamic>{
       'location': instance.location?.toJson(),
       'pref': instance.pref?.map((e) => e.toJson()).toList(),
       'interest': instance.interest?.map((e) => e.toJson()).toList(),
+      'interestSkill': instance.interestSkill,
     };
 
 Interest _$InterestFromJson(Map<String, dynamic> json) => Interest(
       id: json['id'] as String,
       name: json['name'] as String,
-      skill: json['skill'] as String,
     );
 
 Map<String, dynamic> _$InterestToJson(Interest instance) => <String, dynamic>{
       'id': instance.id,
       'name': instance.name,
-      'skill': instance.skill,
     };
 
 Location _$LocationFromJson(Map<String, dynamic> json) => Location(

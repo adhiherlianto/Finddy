@@ -1,12 +1,17 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:finddy/domain/entities/user/user_model.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 
 class UserRepository {
   static Future<List<UserModel>> getAllUser() async {
     List<UserModel> listAllUser = [];
     try {
-      final data = await FirebaseFirestore.instance.collection("users").get();
+      final FirebaseAuth auth = FirebaseAuth.instance;
+      final data = await FirebaseFirestore.instance
+          .collection("users")
+          .where("email", isNotEqualTo: auth.currentUser?.email)
+          .get();
       listAllUser =
           List.from(data.docs.map((e) => UserModel.fromJson(e.data())));
       print("masuk all user");
@@ -24,6 +29,7 @@ class UserRepository {
   static Future<List<UserModel>> getNameSearch(String? name) async {
     List<UserModel> listAllUser = [];
     try {
+      final String? email = FirebaseAuth.instance.currentUser?.email;
       final data = await FirebaseFirestore.instance
           .collection("users")
           .where("name",
@@ -33,6 +39,8 @@ class UserRepository {
           .get();
       listAllUser =
           List.from(data.docs.map((e) => UserModel.fromJson(e.data())));
+      listAllUser.removeWhere((element) => element.email == email);
+      print(listAllUser);
       print("masuk nama");
       return listAllUser;
     } on FirebaseException catch (e) {
@@ -48,12 +56,14 @@ class UserRepository {
   static Future<List<UserModel>> getLocationSearch(String? locationId) async {
     List<UserModel> listAllUser = [];
     try {
+      final String? email = FirebaseAuth.instance.currentUser?.email;
       final data = await FirebaseFirestore.instance
           .collection("users")
           .where("location.locationId", isEqualTo: locationId)
           .get();
       listAllUser =
           List.from(data.docs.map((e) => UserModel.fromJson(e.data())));
+      listAllUser.removeWhere((element) => element.email == email);
       print("masuk lokasi");
       return listAllUser;
     } on FirebaseException catch (e) {
@@ -69,13 +79,14 @@ class UserRepository {
   static Future<List<UserModel>> getSkillSearch(String skill) async {
     List<UserModel> listAllUser = [];
     try {
+      final String? email = FirebaseAuth.instance.currentUser?.email;
       final data = await FirebaseFirestore.instance
           .collection("users")
-          .where("interest", arrayContains: {'skill': skill}).get();
-      // .then((value) => listAllUser =
-      //     List.from(value.docs.map((e) => UserModel.fromJson(e.data()))));
-      // listAllUser =
-      //     List.from(data.docs.map((e) => UserModel.fromJson(e.data())));
+          .where("interestSkill", arrayContains: skill)
+          .get();
+      listAllUser =
+          List.from(data.docs.map((e) => UserModel.fromJson(e.data())));
+      listAllUser.removeWhere((element) => element.email == email);
       print(data.size);
       print("masuk Skill");
       return listAllUser;
@@ -89,27 +100,29 @@ class UserRepository {
     }
   }
 
-  // static Future<List<UserModel>> getInterestSearch(
-  //     String interest) async {
-  //   List<UserModel> listAllUser = [];
-  //   try {
-  //     final data = await FirebaseFirestore.instance
-  //         .collection("users")
-  //         .where("interest.name", arrayContains: interest)
-  //         .get();
-  //     listAllUser =
-  //         List.from(data.docs.map((e) => UserModel.fromJson(e.data())));
-  //     print("masuk lokasi");
-  //     return listAllUser;
-  //   } on FirebaseException catch (e) {
-  //     if (kDebugMode) {
-  //       print("Failed with error : ${e.code} : ${e.message}");
-  //     }
-  //     return listAllUser;
-  //   } catch (e) {
-  //     throw Exception(e.toString());
-  //   }
-  // }
+  static Future<List<UserModel>> getInterestSearch(
+      String? interestId, String? interestName) async {
+    List<UserModel> listAllUser = [];
+    try {
+      final String? email = FirebaseAuth.instance.currentUser?.email;
+      final data = await FirebaseFirestore.instance.collection("users").where(
+          "interest",
+          arrayContains: {"id": interestId, "name": interestName}).get();
+      listAllUser =
+          List.from(data.docs.map((e) => UserModel.fromJson(e.data())));
+      listAllUser.removeWhere((element) => element.email == email);
+      print(data.size);
+      print("masuk interest");
+      return listAllUser;
+    } on FirebaseException catch (e) {
+      if (kDebugMode) {
+        print("Failed with error : ${e.code} : ${e.message}");
+      }
+      return listAllUser;
+    } catch (e) {
+      throw Exception(e.toString());
+    }
+  }
 
   static Future<UserModel> getUser(String email) async {
     UserModel user = const UserModel();
@@ -163,6 +176,7 @@ class UserRepository {
     List<dynamic>? interest,
     List<dynamic>? pref,
     Map<String, String>? location,
+    List<String>? interestSkill,
   }) async {
     try {
       await FirebaseFirestore.instance.collection("users").doc(docId).update({
@@ -174,6 +188,7 @@ class UserRepository {
         "interest": FieldValue.arrayUnion(interest!),
         "pref": FieldValue.arrayUnion(pref!),
         "location": location,
+        "interestSkill": interestSkill,
       });
     } on FirebaseException catch (e) {
       if (kDebugMode) {

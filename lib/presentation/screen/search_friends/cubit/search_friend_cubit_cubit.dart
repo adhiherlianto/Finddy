@@ -48,13 +48,14 @@ class SearchFriendCubit extends Cubit<SearchFriendCubitState> {
     }
   }
 
-  // void getInterestSearch(String? interest) async {
-  //   emit(SearchFriendCubitLoading());
-  //   try {
-  //     final data = await UserRepository.getInterestSearch(interest);
-  //     emit(SearchFriendCubitSuccess(data));
-  //   } catch (e) {
-  //     emit(SearchFriendCubitError(e.toString()));
-  //   }
-  // }
+  void getInterestSearch(String? interestId, String? interestName) async {
+    emit(SearchFriendCubitLoading());
+    try {
+      final data =
+          await UserRepository.getInterestSearch(interestId, interestName);
+      emit(SearchFriendCubitSuccess(data));
+    } catch (e) {
+      emit(SearchFriendCubitError(e.toString()));
+    }
+  }
 }

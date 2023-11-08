@@ -7,11 +7,13 @@ class ParamScreenThree {
   final String? phone;
   final String? photo;
   final List<UserInterestModel> userInterest;
+  final List<String>? interestSkill;
   ParamScreenThree(
       {this.location,
       this.username,
       this.university,
       this.phone,
       this.photo,
-      required this.userInterest});
+      required this.userInterest,
+      this.interestSkill});
 }

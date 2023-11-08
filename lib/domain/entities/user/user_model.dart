@@ -14,6 +14,7 @@ class UserModel {
   final Location? location;
   final List<Pref>? pref;
   final List<Interest>? interest;
+  final List<String>? interestSkill;
 
   const UserModel(
       {this.isVerified,
@@ -25,7 +26,8 @@ class UserModel {
       this.username,
       this.location,
       this.pref,
-      this.interest});
+      this.interest,
+      this.interestSkill});
 
   factory UserModel.fromJson(Map<String, dynamic> json) =>
       _$UserModelFromJson(json);
@@ -37,12 +39,10 @@ class UserModel {
 class Interest {
   String id;
   String name;
-  String skill;
 
   Interest({
     required this.id,
     required this.name,
-    required this.skill,
   });
 
   factory Interest.fromJson(Map<String, dynamic> json) =>

@@ -12,6 +12,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
+import 'package:go_router/go_router.dart';
+
+import '../../navigation/app_routes.dart';
+import '../detail_and_edit_profile/detail_profile_params.dart';
 
 class SearchFriendScreen extends StatefulWidget {
   const SearchFriendScreen({Key? key}) : super(key: key);
@@ -41,7 +45,9 @@ class _SearchFriendScreenState extends State<SearchFriendScreen> {
 
   final TextEditingController _searchController = TextEditingController();
 
-  List<dynamic> bMinat = ['Semua'];
+  List<dynamic> testList = [
+    {"id": "0", "name": "Semua"}
+  ];
   int _selectedStatus = 0;
 
   final List _kemampuanData = ["Semua", "Pemula", "Menengah", "Master"];
@@ -66,13 +72,13 @@ class _SearchFriendScreenState extends State<SearchFriendScreen> {
         BlocListener<UserCubit, UserState>(
           listener: (context, state) {
             if (state is UserSuccess) {
-              bMinat.removeWhere((element) => element != "Semua");
-              final listMinat =
-                  List.from(state.user.interest!.map((e) => e.name));
+              testList.removeWhere((element) => element["name"] != "Semua");
+              final listMihat = List.from(state.user.interest!
+                  .map((e) => {"id": e.id, "name": e.name}));
+              print(testList);
               setState(() {
-                bMinat.addAll(listMinat);
+                testList.addAll(listMihat);
                 idLokasi = state.user.location!.locationId;
-                print(idLokasi);
               });
             }
           },
@@ -88,9 +94,12 @@ class _SearchFriendScreenState extends State<SearchFriendScreen> {
                   children: [
                     _topSide(),
                     ListView.builder(
+                      physics: const NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
                       itemBuilder: (context, index) => _bottomSide(
-                          alluser[index].name!, alluser[index].location!.city),
+                          alluser[index].name!,
+                          alluser[index].location!.city,
+                          index),
                       itemCount: alluser.length,
                     ),
                   ])),
@@ -141,17 +150,23 @@ class _SearchFriendScreenState extends State<SearchFriendScreen> {
           const SizedBox(height: 4),
           Row(
             children: List.generate(
-              bMinat.length,
+              testList.length,
               (index) => FDChip.action(
                 onPressed: () {
                   setState(() {
                     _selectedStatus = index;
+                    if (testList[index]["name"] == "Semua") {
+                      context.read<SearchFriendCubit>().getAllUser();
+                    } else {
+                      context.read<SearchFriendCubit>().getInterestSearch(
+                          testList[index]["id"], testList[index]["name"]);
+                    }
                   });
                 },
                 selectedIndex: _selectedStatus == index,
                 color: AppColors.thirdLightBlue,
                 height: 29,
-                title: bMinat[index],
+                title: testList[index]["name"],
                 textColor: Colors.black,
                 padding:
                     const EdgeInsets.symmetric(vertical: 8, horizontal: 10),
@@ -213,7 +228,7 @@ class _SearchFriendScreenState extends State<SearchFriendScreen> {
     );
   }
 
-  Widget _bottomSide(String name, String location) {
+  Widget _bottomSide(String name, String location, int index) {
     return Container(
       color: AppColors.neutralwhite,
       width: double.infinity,
@@ -221,7 +236,11 @@ class _SearchFriendScreenState extends State<SearchFriendScreen> {
       child: FDCard(
         borderRadius: BorderRadius.circular(12),
         padding: const EdgeInsets.all(12),
-        onPressed: () {},
+        onPressed: () {
+          DetailProfilParams params =
+              DetailProfilParams(email: alluser[index].email!, type: "detail");
+          context.pushNamed(AppRoutes.nrDetailprofile, extra: params);
+        },
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [

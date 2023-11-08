@@ -1,4 +1,5 @@
 import 'package:finddy/domain/entities/preference/preference_model.dart';
+import 'package:finddy/presentation/navigation/app_routes.dart';
 import 'package:finddy/presentation/screen/complete_profile/ParamScreenThree.dart';
 import 'package:finddy/presentation/screen/complete_profile/cubit/preference_cubit.dart';
 import 'package:finddy/presentation/screen/complete_profile/widget/step_indicator.dart';
@@ -81,7 +82,6 @@ class _CompleteProfileStepThreeScreenState
                             interest.add({
                               "id": widget.params!.userInterest[i].id,
                               "name": widget.params!.userInterest[i].name,
-                              "skill": widget.params!.userInterest[i].skill,
                             });
                           }
 
@@ -100,10 +100,11 @@ class _CompleteProfileStepThreeScreenState
                               widget.params!.username!,
                               interest,
                               pref,
-                              widget.params!.location!);
+                              widget.params!.location!,
+                              widget.params!.interestSkill!);
                           print(_dataPref.length);
                           print(interest);
-                          // context.goNamed(AppRoutes.nrHome);
+                          context.goNamed(AppRoutes.nrHome);
                         },
                         text: "Lanjutkan"),
                     const SizedBox(height: 12),

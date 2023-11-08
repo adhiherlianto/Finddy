@@ -2,6 +2,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:finddy/domain/entities/user/user_model.dart';
 import 'package:finddy/gen/assets.gen.dart';
 import 'package:finddy/presentation/navigation/app_routes.dart';
+import 'package:finddy/presentation/screen/detail_and_edit_profile/detail_profile_params.dart';
 import 'package:finddy/presentation/screen/main_screen/cubit/user_cubit.dart';
 import 'package:finddy/presentation/screen/widget/finddy_button.dart';
 import 'package:finddy/presentation/screen/widget/finddy_card.dart';
@@ -57,6 +58,7 @@ class _MainScreenState extends State<MainScreen> {
           );
         } else if (state is UserSuccess) {
           currentUser = state.user;
+          print(currentUser);
         }
       },
       builder: (context, state) => Container(
@@ -260,9 +262,13 @@ class _MainScreenState extends State<MainScreen> {
                                   ),
                                   GestureDetector(
                                     onTap: () {
+                                      DetailProfilParams params =
+                                          DetailProfilParams(
+                                              email: currentUser.email!,
+                                              type: "detail");
                                       context.pushNamed(
                                           AppRoutes.nrDetailprofile,
-                                          extra: "detail");
+                                          extra: params);
                                     },
                                     child: const FDText.bodyP4(
                                       text: "Halaman profile",

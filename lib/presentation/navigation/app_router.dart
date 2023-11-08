@@ -6,6 +6,7 @@ import 'package:finddy/presentation/screen/complete_profile/ParamScreenTwo.dart'
 import 'package:finddy/presentation/screen/complete_profile/complete_profile_step_one_screen.dart';
 import 'package:finddy/presentation/screen/complete_profile/complete_profile_step_three_screen.dart';
 import 'package:finddy/presentation/screen/complete_profile/complete_profile_step_two_screen.dart';
+import 'package:finddy/presentation/screen/detail_and_edit_profile/detail_profile_params.dart';
 import 'package:finddy/presentation/screen/detail_and_edit_profile/detail_profile_screen.dart';
 import 'package:finddy/presentation/screen/home/home_screen.dart';
 import 'package:finddy/presentation/screen/onboarding/onboarding_screen.dart';
@@ -67,8 +68,8 @@ final GoRouter fdGlobalRouter = GoRouter(
         path: '/detail-profile',
         name: AppRoutes.nrDetailprofile,
         builder: (context, state) {
-          final type = state.extra as String;
-          return DetailProfileScreen(type: type);
+          DetailProfilParams params = state.extra as DetailProfilParams;
+          return DetailProfileScreen(params: params);
         },
       ),
     ]);
