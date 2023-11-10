@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:finddy/domain/entities/user_interest/user_interest_model.dart';
 
 class ParamScreenThree {
@@ -5,7 +6,7 @@ class ParamScreenThree {
   final String? username;
   final String? university;
   final String? phone;
-  final String? photo;
+  final File? photo;
   final List<UserInterestModel> userInterest;
   final List<String>? interestSkill;
   ParamScreenThree(

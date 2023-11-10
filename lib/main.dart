@@ -3,6 +3,7 @@ import 'package:finddy/presentation/screen/auth/cubit/auth_cubit.dart';
 import 'package:finddy/presentation/screen/complete_profile/cubit/complete_profile_cubit.dart';
 import 'package:finddy/presentation/screen/complete_profile/cubit/interest_cubit.dart';
 import 'package:finddy/presentation/screen/complete_profile/cubit/preference_cubit.dart';
+import 'package:finddy/presentation/screen/main_screen/cubit/current_user_cubit.dart';
 import 'package:finddy/presentation/screen/main_screen/cubit/user_cubit.dart';
 
 import 'package:finddy/presentation/screen/register/cubit/register_cubit.dart';
@@ -49,6 +50,9 @@ class MyApp extends StatelessWidget {
         }),
         BlocProvider<SearchFriendCubit>(create: (BuildContext context) {
           return SearchFriendCubit();
+        }),
+        BlocProvider<CurrentUserCubit>(create: (BuildContext context) {
+          return CurrentUserCubit();
         }),
       ],
       child: ScrollConfiguration(

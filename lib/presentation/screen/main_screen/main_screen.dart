@@ -1,9 +1,8 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:finddy/domain/entities/user/user_model.dart';
-import 'package:finddy/gen/assets.gen.dart';
 import 'package:finddy/presentation/navigation/app_routes.dart';
 import 'package:finddy/presentation/screen/detail_and_edit_profile/detail_profile_params.dart';
-import 'package:finddy/presentation/screen/main_screen/cubit/user_cubit.dart';
+import 'package:finddy/presentation/screen/main_screen/cubit/current_user_cubit.dart';
 import 'package:finddy/presentation/screen/widget/finddy_button.dart';
 import 'package:finddy/presentation/screen/widget/finddy_card.dart';
 import 'package:finddy/presentation/screen/widget/finddy_logo.dart';
@@ -33,20 +32,14 @@ UserModel currentUser = const UserModel();
 class _MainScreenState extends State<MainScreen> {
   @override
   void initState() {
-    Future.delayed(
-      const Duration(seconds: 1),
-      () {
-        final userEmail = FirebaseAuth.instance.currentUser!.email;
-        context.read<UserCubit>().getUser(userEmail!);
-      },
-    );
-
+    final userEmail = FirebaseAuth.instance.currentUser!.email;
+    context.read<CurrentUserCubit>().getCurrentUser(userEmail!);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<UserCubit, UserState>(
+    return BlocConsumer<CurrentUserCubit, CurrentUserState>(
       listener: (context, state) {
         if (state is LogoutSuccess) {
           context.goNamed(AppRoutes.nrLogin);
@@ -56,9 +49,8 @@ class _MainScreenState extends State<MainScreen> {
               content: Text(state.error),
             ),
           );
-        } else if (state is UserSuccess) {
-          currentUser = state.user;
-          print(currentUser);
+        } else if (state is CurrentUserSuccess) {
+          currentUser = state.currentUser;
         }
       },
       builder: (context, state) => Container(
@@ -244,10 +236,13 @@ class _MainScreenState extends State<MainScreen> {
                           Row(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Image.asset(
-                                Assets.images.emptyProfile.path,
-                                width: 52,
-                                height: 52,
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(50),
+                                child: Image.network(
+                                  currentUser.photo!,
+                                  width: 52,
+                                  height: 52,
+                                ),
                               ),
                               const SizedBox(
                                 width: 12,
@@ -255,8 +250,8 @@ class _MainScreenState extends State<MainScreen> {
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  const FDText.headersH7(
-                                      text: "Indra Kurniawan"),
+                                  FDText.headersH7(
+                                      text: currentUser.name ?? "Indra"),
                                   const SizedBox(
                                     height: 4,
                                   ),
@@ -284,7 +279,7 @@ class _MainScreenState extends State<MainScreen> {
                           ),
                           FDButton.secondary(
                             onPressed: () {
-                              context.read<UserCubit>().LogoutUser();
+                              context.read<CurrentUserCubit>().logoutUser();
                               context.goNamed(AppRoutes.nrLogin);
                             },
                             text: "Keluar",

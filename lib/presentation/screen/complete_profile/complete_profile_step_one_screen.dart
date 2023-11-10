@@ -15,7 +15,6 @@ import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
-
 import 'cubit/complete_profile_cubit.dart';
 
 class CompleteProfileStepOneScreen extends StatefulWidget {
@@ -191,9 +190,7 @@ class _CompleteProfileStepOneScreenState
                                       "city": _valCity!,
                                     },
                                     phone: _phoneController.text,
-                                    photo: selectedImage != null
-                                        ? selectedImage!.path.toString()
-                                        : "kosong",
+                                    photo: selectedImage,
                                     university: _universityController.text,
                                     username: _usernameController.text);
                                 context.pushNamed(
@@ -214,88 +211,6 @@ class _CompleteProfileStepOneScreenState
       },
     );
   }
-
-  // Future _bottomSheetLocation(List list, String type) async {
-  //   await showModalBottomSheet(
-  //     shape: RoundedRectangleBorder(
-  //       borderRadius: BorderRadius.circular(20.0),
-  //     ),
-  //     context: context,
-  //     builder: (BuildContext context) => Container(
-  //         padding: const EdgeInsets.all(10),
-  //         height: 500,
-  //         child: ListView.builder(
-  //           itemBuilder: (context, index) {
-  //             int? selectedValue;
-  //             return StatefulBuilder(
-  //               builder: (context, setState) {
-  //                 return Column(
-  //                   children: [
-  //                     ListTile(
-  //                       title: Text(type == "province"
-  //                           ? list[index].toString()
-  //                           : list[index].name.toString()),
-  //                       trailing: Radio<int>(
-  //                         value: index,
-  //                         groupValue: selectedValue,
-  //                         onChanged: (int? value) {
-  //                           setState(() {
-  //                             selectedValue = value;
-  //                             if (type == "province") {
-  //                               _valCity = null;
-  //                               _locationId = null;
-  //                               _valProvince = list[index].toString();
-  //                               context
-  //                                   .read<CompleteProfileCubit>()
-  //                                   .getLocation(_valProvince!);
-  //                             } else {
-  //                               _valCity = list[index].name.toString();
-  //                               _locationId = list[index].id.toString();
-  //                             }
-  //                           });
-  //                           Future.delayed(const Duration(milliseconds: 200),
-  //                               () {
-  //                             context.pop();
-  //                           });
-  //                         },
-  //                       ),
-  //                     ),
-  //                     const Divider()
-  //                   ],
-  //                 );
-  //               },
-  //             );
-  //           },
-  //           itemCount: list.length,
-  //         )),
-  //   );
-  // }
-
-  // Widget _dropDown(List items, String? value, String type) {
-  //   return DropdownButtonFormField(
-  //       decoration: InputDecoration(
-  //           border: OutlineInputBorder(
-  //             borderRadius: BorderRadius.circular(4),
-  //           ),
-  //           contentPadding:
-  //               const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-  //           filled: true,
-  //           fillColor: AppColors.neutralwhite),
-  //       focusColor: Colors.transparent,
-  //       hint: FDText.bodyP4(
-  //           text: type == 'kemampuan' ? "Pilih Kemampuan" : "Pilih Lokasi",
-  //           color: AppColors.neutralBlack20),
-  //       items: items
-  //           .map((e) =>
-  //               DropdownMenuItem(value: e, child: FDText.bodyP4(text: e)))
-  //           .toList(),
-  //       value: value,
-  //       onChanged: (value) {
-  //         setState(() {
-  //           _valProvince = value as String;
-  //         });
-  //       });
-  // }
 
   Future pickFile(ImageSource imageSource) async {
     try {

@@ -39,7 +39,8 @@ class UserRepository {
           .get();
       listAllUser =
           List.from(data.docs.map((e) => UserModel.fromJson(e.data())));
-      listAllUser.removeWhere((element) => element.email == email);
+      listAllUser.removeWhere(
+          (element) => element.email == email || element.isVerified == false);
       print(listAllUser);
       print("masuk nama");
       return listAllUser;
@@ -63,7 +64,8 @@ class UserRepository {
           .get();
       listAllUser =
           List.from(data.docs.map((e) => UserModel.fromJson(e.data())));
-      listAllUser.removeWhere((element) => element.email == email);
+      listAllUser.removeWhere(
+          (element) => element.email == email || element.isVerified == false);
       print("masuk lokasi");
       return listAllUser;
     } on FirebaseException catch (e) {
@@ -86,7 +88,8 @@ class UserRepository {
           .get();
       listAllUser =
           List.from(data.docs.map((e) => UserModel.fromJson(e.data())));
-      listAllUser.removeWhere((element) => element.email == email);
+      listAllUser.removeWhere(
+          (element) => element.email == email || element.isVerified == false);
       print(data.size);
       print("masuk Skill");
       return listAllUser;
@@ -110,7 +113,8 @@ class UserRepository {
           arrayContains: {"id": interestId, "name": interestName}).get();
       listAllUser =
           List.from(data.docs.map((e) => UserModel.fromJson(e.data())));
-      listAllUser.removeWhere((element) => element.email == email);
+      listAllUser.removeWhere(
+          (element) => element.email == email || element.isVerified == false);
       print(data.size);
       print("masuk interest");
       return listAllUser;

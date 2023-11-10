@@ -25,7 +25,6 @@ class CompleteProfileCubit extends Cubit<CompleteProfileState> {
       emit(GetLocationSuccess(data));
     } catch (e) {
       emit(GetLocationError());
-      print(e.toString());
     }
   }
 }

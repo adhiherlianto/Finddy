@@ -69,10 +69,9 @@ class _DetailProfileScreenState extends State<DetailProfileScreen> {
       child: Column(
         children: [
           const SizedBox(height: 30),
-          const FDProfilePicture(
+          FDProfilePicture(
             size: 100,
-            data:
-                'https://assets.goal.com/v3/assets/bltcc7a7ffd2fbf71f5/blt943c9f051f0087c0/639f1d7d03c7a66c44782060/GettyImages-1245184407.jpg?auto=webp&format=pjpg&width=3840&quality=60',
+            data: currentUser.photo!,
           ),
           FDText.headersH5(text: currentUser.name!),
           FDText.bodyP4(text: currentUser.username!),
@@ -145,7 +144,9 @@ class _DetailProfileScreenState extends State<DetailProfileScreen> {
                   FDChip.normal(
                       color: AppColors.accentGrass,
                       height: 22,
-                      title: currentUser.interestSkill![index])
+                      title: currentUser.interestSkill!.length > 1
+                          ? currentUser.interestSkill![index]
+                          : currentUser.interestSkill![0])
                 ],
               )),
         )

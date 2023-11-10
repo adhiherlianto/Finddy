@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:finddy/domain/entities/preference/preference_model.dart';
 import 'package:finddy/presentation/navigation/app_routes.dart';
 import 'package:finddy/presentation/screen/complete_profile/ParamScreenThree.dart';
@@ -8,6 +10,7 @@ import 'package:finddy/presentation/screen/widget/finddy_card.dart';
 import 'package:finddy/presentation/screen/widget/finddy_text.dart';
 import 'package:finddy/presentation/theme/colors.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -24,14 +27,10 @@ class CompleteProfileStepThreeScreen extends StatefulWidget {
 
 class _CompleteProfileStepThreeScreenState
     extends State<CompleteProfileStepThreeScreen> {
-  // List<Map<String, String>> data = [
-  //   {'id': '1', 'value': 'Mencari teman belajar untuk belajar bersama'},
-  //   {'id': '2', 'value': 'Mencari teman belajar sebagai mentor'},
-  //   {'id': '3', 'value': 'Mencari teman belajar untuk bertanya dan sharing'},
-  //   {'id': '4', 'value': 'Mencari teman belajar sebagai teman seperjuangan'}
-  // ];
-
   List<PreferenceModel> _dataPref = [];
+  final List<PreferenceModel> _selectedPref = [];
+
+  String? url;
 
   List<PreferenceModel> preferensiTeman = [];
   @override
@@ -73,7 +72,7 @@ class _CompleteProfileStepThreeScreenState
                     _customCheckBox(),
                     const SizedBox(height: 100),
                     FDButton.primary(
-                        onPressed: () {
+                        onPressed: () async {
                           final userData = FirebaseAuth.instance.currentUser;
                           final interest = [];
                           for (var i = 0;
@@ -84,26 +83,34 @@ class _CompleteProfileStepThreeScreenState
                               "name": widget.params!.userInterest[i].name,
                             });
                           }
-
                           final pref = [];
-                          for (var i = 0; i < _dataPref.length; i++) {
+                          for (var i = 0; i < _selectedPref.length; i++) {
                             pref.add({
-                              "id": _dataPref[i].id,
-                              "name": _dataPref[i].name
+                              "id": _selectedPref[i].id,
+                              "name": _selectedPref[i].name
                             });
+                          }
+                          if (widget.params?.photo != null) {
+                            final nameFile = "files/${userData!.email}.jpg";
+                            final ref =
+                                FirebaseStorage.instance.ref().child(nameFile);
+                            await ref.putFile(widget.params!.photo!,
+                                SettableMetadata(contentType: "jpg"));
+                            url = (await ref.getDownloadURL()).toString();
+                          } else {
+                            url =
+                                "https://firebasestorage.googleapis.com/v0/b/finddy-98fee.appspot.com/o/files%2Fuser.png?alt=media&token=678bde3b-8adf-4520-ac53-de649b85bdfb";
                           }
                           context.read<PreferenceCubit>().upadateUser(
                               userData!.uid,
                               widget.params!.phone!,
-                              widget.params!.photo!,
+                              url!,
                               widget.params!.university!,
                               widget.params!.username!,
                               interest,
                               pref,
                               widget.params!.location!,
                               widget.params!.interestSkill!);
-                          print(_dataPref.length);
-                          print(interest);
                           context.goNamed(AppRoutes.nrHome);
                         },
                         text: "Lanjutkan"),
@@ -138,6 +145,7 @@ class _CompleteProfileStepThreeScreenState
               Checkbox(
                   value: isSelected(_dataPref[index].name),
                   onChanged: ((value) {
+                    _selectedPref.add(_dataPref[index]);
                     addOrReplace(_dataPref[index].name, _dataPref[index].name);
                   })),
               const SizedBox(width: 15),

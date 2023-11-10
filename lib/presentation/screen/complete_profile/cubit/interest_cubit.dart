@@ -12,7 +12,6 @@ class InterestCubit extends Cubit<InterestState> {
     emit(InterestLoading());
     try {
       final data = await InterestRepository.getCity();
-      print(data);
       emit(InterestSuccess(data));
     } catch (e) {
       emit(InterestError());

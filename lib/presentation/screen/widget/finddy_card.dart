@@ -2,15 +2,15 @@ import 'package:finddy/presentation/theme/colors.dart';
 import 'package:flutter/material.dart';
 
 class FDCard extends StatelessWidget {
-  EdgeInsetsGeometry? padding;
-  EdgeInsetsGeometry? margin;
-  Color? color;
-  double? height;
+  final EdgeInsetsGeometry? padding;
+  final EdgeInsetsGeometry? margin;
+  final Color? color;
+  final double? height;
   final Widget child;
   final BorderRadiusGeometry borderRadius;
-  VoidCallback? onPressed;
+  final VoidCallback? onPressed;
 
-  FDCard(
+  const FDCard(
       {Key? key,
       this.margin,
       this.color,

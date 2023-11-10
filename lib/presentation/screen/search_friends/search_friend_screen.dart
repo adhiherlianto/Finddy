@@ -1,5 +1,5 @@
 import 'package:finddy/domain/entities/user/user_model.dart';
-import 'package:finddy/presentation/screen/main_screen/cubit/user_cubit.dart';
+import 'package:finddy/presentation/screen/main_screen/cubit/current_user_cubit.dart';
 import 'package:finddy/presentation/screen/search_friends/cubit/search_friend_cubit_cubit.dart';
 import 'package:finddy/presentation/screen/widget/finddy_card.dart';
 import 'package:finddy/presentation/screen/widget/finddy_chip.dart';
@@ -33,21 +33,27 @@ class _SearchFriendScreenState extends State<SearchFriendScreen> {
 
   @override
   void initState() {
-    final userEmail = FirebaseAuth.instance.currentUser!.email;
-    context.read<UserCubit>().getUser(userEmail!);
-    context.read<SearchFriendCubit>().getAllUser();
     super.initState();
   }
 
+  @override
+  void didChangeDependencies() {
+    final userEmail = FirebaseAuth.instance.currentUser!.email;
+    context.read<CurrentUserCubit>().getCurrentUser(userEmail!);
+    context.read<SearchFriendCubit>().getAllUser();
+    super.didChangeDependencies();
+  }
+
+  List<dynamic> bMinat = [
+    {"id": "0", "name": "Semua"}
+  ];
   List<UserModel> alluser = [];
   String? name;
   UserModel currentUser = const UserModel();
+  UserModel user = const UserModel();
 
   final TextEditingController _searchController = TextEditingController();
 
-  List<dynamic> testList = [
-    {"id": "0", "name": "Semua"}
-  ];
   int _selectedStatus = 0;
 
   final List _kemampuanData = ["Semua", "Pemula", "Menengah", "Master"];
@@ -69,20 +75,17 @@ class _SearchFriendScreenState extends State<SearchFriendScreen> {
             });
           }
         }),
-        BlocListener<UserCubit, UserState>(
+        BlocListener<CurrentUserCubit, CurrentUserState>(
           listener: (context, state) {
-            if (state is UserSuccess) {
-              testList.removeWhere((element) => element["name"] != "Semua");
-              final listMihat = List.from(state.user.interest!
+            if (state is CurrentUserSuccess) {
+              bMinat.removeWhere((element) => element["name"] != "Semua");
+              final listMihat = List.from(state.currentUser.interest!
                   .map((e) => {"id": e.id, "name": e.name}));
-              print(testList);
-              setState(() {
-                testList.addAll(listMihat);
-                idLokasi = state.user.location!.locationId;
-              });
+              bMinat.addAll(listMihat);
+              idLokasi = state.currentUser.location!.locationId;
             }
           },
-        )
+        ),
       ],
       child: Scaffold(
         resizeToAvoidBottomInset: false,
@@ -150,23 +153,23 @@ class _SearchFriendScreenState extends State<SearchFriendScreen> {
           const SizedBox(height: 4),
           Row(
             children: List.generate(
-              testList.length,
+              bMinat.length,
               (index) => FDChip.action(
                 onPressed: () {
                   setState(() {
                     _selectedStatus = index;
-                    if (testList[index]["name"] == "Semua") {
+                    if (bMinat[index]["name"] == "Semua") {
                       context.read<SearchFriendCubit>().getAllUser();
                     } else {
                       context.read<SearchFriendCubit>().getInterestSearch(
-                          testList[index]["id"], testList[index]["name"]);
+                          bMinat[index]["id"], bMinat[index]["name"]);
                     }
                   });
                 },
                 selectedIndex: _selectedStatus == index,
                 color: AppColors.thirdLightBlue,
                 height: 29,
-                title: testList[index]["name"],
+                title: bMinat[index]["name"],
                 textColor: Colors.black,
                 padding:
                     const EdgeInsets.symmetric(vertical: 8, horizontal: 10),
@@ -237,17 +240,14 @@ class _SearchFriendScreenState extends State<SearchFriendScreen> {
         borderRadius: BorderRadius.circular(12),
         padding: const EdgeInsets.all(12),
         onPressed: () {
-          DetailProfilParams params =
-              DetailProfilParams(email: alluser[index].email!, type: "detail");
+          DetailProfilParams params = DetailProfilParams(
+              email: alluser[index].email!, type: "detail teman");
           context.pushNamed(AppRoutes.nrDetailprofile, extra: params);
         },
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            const FDProfilePicture(
-                size: 54,
-                data:
-                    'https://assets.goal.com/v3/assets/bltcc7a7ffd2fbf71f5/blt943c9f051f0087c0/639f1d7d03c7a66c44782060/GettyImages-1245184407.jpg?auto=webp&format=pjpg&width=3840&quality=60'),
+            FDProfilePicture(size: 54, data: alluser[index].photo!),
             const SizedBox(width: 12),
             Expanded(
                 child: Column(
@@ -310,7 +310,6 @@ class _SearchFriendScreenState extends State<SearchFriendScreen> {
           if (type == 'kemampuan') {
             setState(() {
               _valkemampuanData = value as String;
-              print(_valkemampuanData);
               if (_valkemampuanData == "Semua") {
                 context.read<SearchFriendCubit>().getAllUser();
               } else {
@@ -322,7 +321,6 @@ class _SearchFriendScreenState extends State<SearchFriendScreen> {
           } else {
             setState(() {
               _valLokasi = value as String;
-              print(_valLokasi);
               if (_valLokasi == "Lokasiku") {
                 context.read<SearchFriendCubit>().getLocationSearch(idLokasi);
               } else {
