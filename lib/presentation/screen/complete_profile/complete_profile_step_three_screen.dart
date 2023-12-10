@@ -32,7 +32,7 @@ class _CompleteProfileStepThreeScreenState
 
   String? url;
 
-  List<PreferenceModel> preferensiTeman = [];
+  // List<PreferenceModel> _selectedPref = [];
   @override
   void initState() {
     context.read<PreferenceCubit>().getAllPref();
@@ -57,21 +57,22 @@ class _CompleteProfileStepThreeScreenState
                 child: SingleChildScrollView(
               child: Container(
                 padding: const EdgeInsets.fromLTRB(24, 44, 24, 20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const FDText.headersH3(
-                        text: "Tentukan preferensi teman belajar",
-                        color: AppColors.neutralBlack60),
-                    const SizedBox(height: 12),
-                    const FDText.bodyP3(
-                        text:
-                            "Pilih beberapa kriteria berikut yang akan membantu proses pencarian teman belajarmu",
-                        color: AppColors.neutralBlack60),
-                    const SizedBox(height: 35),
-                    _customCheckBox(),
-                    const SizedBox(height: 100),
-                    FDButton.primary(
+                child: BlocBuilder<PreferenceCubit, PreferenceState>(
+                  builder: (context, state) => Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const FDText.headersH3(
+                          text: "Tentukan preferensi teman belajar",
+                          color: AppColors.neutralBlack60),
+                      const SizedBox(height: 12),
+                      const FDText.bodyP3(
+                          text:
+                              "Pilih beberapa kriteria berikut yang akan membantu proses pencarian teman belajarmu",
+                          color: AppColors.neutralBlack60),
+                      const SizedBox(height: 35),
+                      _customCheckBox(),
+                      const SizedBox(height: 100),
+                      FDButton.primary(
                         onPressed: () async {
                           final userData = FirebaseAuth.instance.currentUser;
                           final interest = [];
@@ -83,15 +84,9 @@ class _CompleteProfileStepThreeScreenState
                               "name": widget.params!.userInterest[i].name,
                             });
                           }
-                          final pref = [];
-                          for (var i = 0; i < _selectedPref.length; i++) {
-                            pref.add({
-                              "id": _selectedPref[i].id,
-                              "name": _selectedPref[i].name
-                            });
-                          }
+
                           if (widget.params?.photo != null) {
-                            final nameFile = "files/${userData!.email}.jpg";
+                            final nameFile = "files/${userData!.email}";
                             final ref =
                                 FirebaseStorage.instance.ref().child(nameFile);
                             await ref.putFile(widget.params!.photo!,
@@ -100,6 +95,13 @@ class _CompleteProfileStepThreeScreenState
                           } else {
                             url =
                                 "https://firebasestorage.googleapis.com/v0/b/finddy-98fee.appspot.com/o/files%2Fuser.png?alt=media&token=678bde3b-8adf-4520-ac53-de649b85bdfb";
+                          }
+                          final pref = [];
+                          for (var i = 0; i < _selectedPref.length; i++) {
+                            pref.add({
+                              "id": _selectedPref[i].id,
+                              "name": _selectedPref[i].name
+                            });
                           }
                           context.read<PreferenceCubit>().upadateUser(
                               userData!.uid,
@@ -111,16 +113,20 @@ class _CompleteProfileStepThreeScreenState
                               pref,
                               widget.params!.location!,
                               widget.params!.interestSkill!);
-                          context.goNamed(AppRoutes.nrHome);
+                          if (state is PreferenceSuccess) {
+                            context.goNamed(AppRoutes.nrHome);
+                          }
                         },
-                        text: "Lanjutkan"),
-                    const SizedBox(height: 12),
-                    FDButton.secondary(
-                        onPressed: () {
-                          context.pop();
-                        },
-                        text: "Kembali"),
-                  ],
+                        text: "Lanjutkan",
+                      ),
+                      const SizedBox(height: 12),
+                      FDButton.secondary(
+                          onPressed: () {
+                            context.pop();
+                          },
+                          text: "Kembali"),
+                    ],
+                  ),
                 ),
               ),
             ))
@@ -145,8 +151,8 @@ class _CompleteProfileStepThreeScreenState
               Checkbox(
                   value: isSelected(_dataPref[index].name),
                   onChanged: ((value) {
-                    _selectedPref.add(_dataPref[index]);
                     addOrReplace(_dataPref[index].name, _dataPref[index].name);
+                    print(_selectedPref.first.name);
                   })),
               const SizedBox(width: 15),
               Expanded(child: FDText.bodyP2(text: _dataPref[index].name))
@@ -158,7 +164,7 @@ class _CompleteProfileStepThreeScreenState
   }
 
   bool isSelected(String title) {
-    var contain = preferensiTeman.where((element) => element.name == title);
+    var contain = _selectedPref.where((element) => element.name == title);
     if (contain.isEmpty) {
       return false;
     } else {
@@ -169,11 +175,11 @@ class _CompleteProfileStepThreeScreenState
   void addOrReplace(String title, String id) {
     if (isSelected(title)) {
       setState(() {
-        preferensiTeman.removeWhere((element) => element.name == title);
+        _selectedPref.removeWhere((element) => element.name == title);
       });
     } else {
       setState(() {
-        preferensiTeman.add(PreferenceModel(id, title));
+        _selectedPref.add(PreferenceModel(id, title));
       });
     }
   }

@@ -45,6 +45,7 @@ class PreferenceCubit extends Cubit<PreferenceState> {
           interestSkill: interestSkill);
       emit(UpdateUserSuccess());
     } catch (e) {
+      print(e.toString());
       emit(UpdateUserError(e.toString()));
     }
   }

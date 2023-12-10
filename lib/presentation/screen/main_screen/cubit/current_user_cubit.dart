@@ -15,15 +15,17 @@ class CurrentUserCubit extends Cubit<CurrentUserState> {
       final user = await UserRepository.getUser(email);
       emit(CurrentUserSuccess(user));
     } catch (e) {
+      print(e.toString());
       emit(CurrentUserError(e.toString()));
     }
   }
 
-  void LogoutUser() async {
+  void logoutUser() async {
     try {
       await FirebaseAuth.instance.signOut();
       emit(LogoutSuccess());
     } catch (e) {
+      print("a : ${e.toString()}");
       emit(LogoutError(e.toString()));
     }
   }

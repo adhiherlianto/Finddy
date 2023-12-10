@@ -4,6 +4,7 @@ part 'user_model.g.dart';
 
 @JsonSerializable(explicitToJson: true)
 class UserModel {
+  final String? uid;
   final bool? isVerified;
   final String? email;
   final String? name;
@@ -15,9 +16,12 @@ class UserModel {
   final List<Pref>? pref;
   final List<Interest>? interest;
   final List<String>? interestSkill;
+  final List<String>? friends;
+  final List<String>? friendRequests;
 
   const UserModel(
-      {this.isVerified,
+      {this.uid,
+      this.isVerified,
       this.email,
       this.name,
       this.phone,
@@ -27,7 +31,9 @@ class UserModel {
       this.location,
       this.pref,
       this.interest,
-      this.interestSkill});
+      this.interestSkill,
+      this.friends,
+      this.friendRequests});
 
   factory UserModel.fromJson(Map<String, dynamic> json) =>
       _$UserModelFromJson(json);

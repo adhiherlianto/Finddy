@@ -8,4 +8,7 @@ abstract class AppRoutes {
   static const String nrCompleteProfileStep2 = "complete-profile-step-2";
   static const String nrCompleteProfileStep3 = "complete-profile-step-3";
   static const String nrDetailprofile = "detail-profile";
+  static const String nrFriendRequest = "friend-request";
+  static const String nrChatRoom = "chat-room";
+  static const String nrChatFile = "chat-file";
 }

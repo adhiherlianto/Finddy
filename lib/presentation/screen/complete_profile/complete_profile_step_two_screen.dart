@@ -94,11 +94,12 @@ class _CompleteProfileStepTwoScreenState
                             ),
                           ),
                           onChanged: (value) {
-                            if (_listInterest.length < 3) {
+                            if (_userInterest.length < 3) {
                               final UserInterestModel interestValue =
                                   UserInterestModel(value!.id, value.name);
                               setState(() {
                                 _userInterest.add(interestValue);
+                                print(_userInterest.length);
                               });
                             }
                           },

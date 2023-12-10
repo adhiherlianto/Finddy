@@ -1,6 +1,10 @@
 import 'package:finddy/globals.dart';
 import 'package:finddy/presentation/navigation/app_routes.dart';
 import 'package:finddy/presentation/screen/auth/login_screen.dart';
+import 'package:finddy/presentation/screen/chat/chat_params.dart';
+import 'package:finddy/presentation/screen/chat/chat_screen.dart';
+import 'package:finddy/presentation/screen/chat/file_page.dart';
+import 'package:finddy/presentation/screen/chat/file_page_params.dart';
 import 'package:finddy/presentation/screen/complete_profile/ParamScreenThree.dart';
 import 'package:finddy/presentation/screen/complete_profile/ParamScreenTwo.dart';
 import 'package:finddy/presentation/screen/complete_profile/complete_profile_step_one_screen.dart';
@@ -8,6 +12,7 @@ import 'package:finddy/presentation/screen/complete_profile/complete_profile_ste
 import 'package:finddy/presentation/screen/complete_profile/complete_profile_step_two_screen.dart';
 import 'package:finddy/presentation/screen/detail_and_edit_profile/detail_profile_params.dart';
 import 'package:finddy/presentation/screen/detail_and_edit_profile/detail_profile_screen.dart';
+import 'package:finddy/presentation/screen/friend_request/friend_request_screen.dart';
 import 'package:finddy/presentation/screen/home/home_screen.dart';
 import 'package:finddy/presentation/screen/onboarding/onboarding_screen.dart';
 import 'package:finddy/presentation/screen/register/register_screen.dart';
@@ -70,6 +75,27 @@ final GoRouter fdGlobalRouter = GoRouter(
         builder: (context, state) {
           DetailProfilParams params = state.extra as DetailProfilParams;
           return DetailProfileScreen(params: params);
+        },
+      ),
+      GoRoute(
+        path: '/friend-request',
+        name: AppRoutes.nrFriendRequest,
+        builder: (context, state) => const FriendRequestScreen(),
+      ),
+      GoRoute(
+        path: '/chat-room',
+        name: AppRoutes.nrChatRoom,
+        builder: (context, state) {
+          ChatParams params = state.extra as ChatParams;
+          return ChatScreen(params: params);
+        },
+      ),
+      GoRoute(
+        path: '/chat-file',
+        name: AppRoutes.nrChatFile,
+        builder: (context, state) {
+          FilePageParams params = state.extra as FilePageParams;
+          return FilePage(params: params);
         },
       ),
     ]);

@@ -43,6 +43,7 @@ class _CompleteProfileStepOneScreenState
     super.initState();
   }
 
+  final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<CompleteProfileCubit, CompleteProfileState>(
@@ -64,142 +65,156 @@ class _CompleteProfileStepOneScreenState
                     const StepIndicator(currentStep: 1),
                     Container(
                       padding: const EdgeInsets.fromLTRB(24, 44, 24, 0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const FDText.headersH3(
-                              text: "Lengkapi data kamu",
-                              color: AppColors.neutralBlack60),
-                          const SizedBox(height: 12),
-                          const FDText.bodyP3(
-                              text: "Isi identitas lengkapmu dulu ya!",
-                              color: AppColors.neutralBlack60),
-                          const SizedBox(height: 40),
-                          InkWell(
-                              onTap: () {
-                                pickPhoto();
-                              },
-                              child: Center(
-                                child: selectedImage != null
-                                    ? ClipOval(
-                                        child: SizedBox.fromSize(
-                                          size: const Size.fromRadius(48),
-                                          child: Image.file(
-                                            selectedImage!,
-                                            fit: BoxFit.cover,
+                      child: Form(
+                        key: _formKey,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const FDText.headersH3(
+                                text: "Lengkapi data kamu",
+                                color: AppColors.neutralBlack60),
+                            const SizedBox(height: 12),
+                            const FDText.bodyP3(
+                                text: "Isi identitas lengkapmu dulu ya!",
+                                color: AppColors.neutralBlack60),
+                            const SizedBox(height: 40),
+                            InkWell(
+                                onTap: () {
+                                  pickPhoto();
+                                },
+                                child: Center(
+                                  child: selectedImage != null
+                                      ? ClipOval(
+                                          child: SizedBox.fromSize(
+                                            size: const Size.fromRadius(48),
+                                            child: Image.file(
+                                              selectedImage!,
+                                              fit: BoxFit.cover,
+                                            ),
                                           ),
-                                        ),
-                                      )
-                                    : Image.asset(Assets.images.profile.path,
-                                        width: 100, height: 100),
-                              )),
-                          const SizedBox(height: 33),
-                          const FDText.headersH6(
-                            text: "Username",
-                            color: AppColors.neutralBlack60,
-                          ),
-                          const SizedBox(height: 12),
-                          FDTextField.normal(
-                            hintText: "Masukan username kamu",
-                            textEditingController: _usernameController,
-                            onChanged: (data) {},
-                          ),
-                          const SizedBox(height: 24),
-                          const FDText.headersH6(
-                            text: "Asal perguruan tinggi",
-                            color: AppColors.neutralBlack60,
-                          ),
-                          const SizedBox(height: 12),
-                          FDTextField.normal(
-                            hintText: "Pilih perguruan tinggi",
-                            textEditingController: _universityController,
-                            onChanged: (data) {},
-                          ),
-                          const SizedBox(height: 24),
-                          const FDText.headersH6(
-                            text: "Provinsi",
-                            color: AppColors.neutralBlack60,
-                          ),
-                          const SizedBox(height: 12),
-                          DropdownSearch<String>(
-                            popupProps: const PopupProps.bottomSheet(
-                                showSearchBox: true,
-                                constraints: BoxConstraints.expand()),
-                            items: _province,
-                            dropdownDecoratorProps: DropDownDecoratorProps(
-                              dropdownSearchDecoration: InputDecoration(
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(4),
-                                ),
-                                hintText: "Pilih Provinsi",
-                              ),
+                                        )
+                                      : Image.asset(Assets.images.profile.path,
+                                          width: 100, height: 100),
+                                )),
+                            const SizedBox(height: 33),
+                            const FDText.headersH6(
+                              text: "Username",
+                              color: AppColors.neutralBlack60,
                             ),
-                            onChanged: (value) {
-                              _valProvince = value;
-                              context
-                                  .read<CompleteProfileCubit>()
-                                  .getLocation(_valProvince!);
-                            },
-                          ),
-                          const SizedBox(height: 24),
-                          const FDText.headersH6(
-                            text: "Kabupaten/Kota",
-                            color: AppColors.neutralBlack60,
-                          ),
-                          const SizedBox(height: 12),
-                          DropdownSearch<LocationModel>(
-                            popupProps: const PopupProps.bottomSheet(
-                                showSearchBox: true,
-                                constraints: BoxConstraints.expand()),
-                            items: _listLocation,
-                            itemAsString: (item) => item.name.toString(),
-                            dropdownDecoratorProps: DropDownDecoratorProps(
-                              dropdownSearchDecoration: InputDecoration(
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(4),
-                                ),
-                                hintText: "Pilih Kabupaten/Kota",
-                              ),
+                            const SizedBox(height: 12),
+                            FDTextField.normal(
+                              hintText: "Masukan username kamu",
+                              textEditingController: _usernameController,
+                              onChanged: (data) {},
                             ),
-                            onChanged: (value) {
-                              if (value != null) {
-                                _valCity = value.name;
-                                _locationId = value.id;
-                              }
-                            },
-                          ),
-                          const SizedBox(height: 24),
-                          const FDText.headersH6(
-                            text: "Kontak (No. Whatsapp)",
-                            color: AppColors.neutralBlack60,
-                          ),
-                          const SizedBox(height: 12),
-                          FDTextField.normal(
-                            isNumber: true,
-                            hintText: "Masukan Kontakmu",
-                            textEditingController: _phoneController,
-                            onChanged: (data) {},
-                          ),
-                          const SizedBox(height: 40),
-                          FDButton.primary(
-                              onPressed: () {
-                                ParamScreenTwo params = ParamScreenTwo(
-                                    location: {
-                                      "locationId": _locationId!,
-                                      "province": _valProvince!,
-                                      "city": _valCity!,
-                                    },
-                                    phone: _phoneController.text,
-                                    photo: selectedImage,
-                                    university: _universityController.text,
-                                    username: _usernameController.text);
-                                context.pushNamed(
-                                  "complete-profile-step-2",
-                                  extra: params,
-                                );
+                            const SizedBox(height: 24),
+                            const FDText.headersH6(
+                              text: "Asal Instansi",
+                              color: AppColors.neutralBlack60,
+                            ),
+                            const SizedBox(height: 12),
+                            FDTextField.normal(
+                              hintText: "Pilih perguruan tinggi",
+                              textEditingController: _universityController,
+                              onChanged: (data) {},
+                            ),
+                            const SizedBox(height: 24),
+                            const FDText.headersH6(
+                              text: "Provinsi",
+                              color: AppColors.neutralBlack60,
+                            ),
+                            const SizedBox(height: 12),
+                            DropdownSearch<String>(
+                              popupProps: const PopupProps.bottomSheet(
+                                  showSearchBox: true,
+                                  constraints: BoxConstraints.expand()),
+                              items: _province,
+                              dropdownDecoratorProps: DropDownDecoratorProps(
+                                dropdownSearchDecoration: InputDecoration(
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(4),
+                                  ),
+                                  hintText: "Pilih Provinsi",
+                                ),
+                              ),
+                              onChanged: (value) {
+                                _valProvince = value;
+                                context
+                                    .read<CompleteProfileCubit>()
+                                    .getLocation(_valProvince!);
                               },
-                              text: "Lanjutkan"),
-                        ],
+                            ),
+                            const SizedBox(height: 24),
+                            const FDText.headersH6(
+                              text: "Kabupaten/Kota",
+                              color: AppColors.neutralBlack60,
+                            ),
+                            const SizedBox(height: 12),
+                            DropdownSearch<LocationModel>(
+                              popupProps: const PopupProps.bottomSheet(
+                                  showSearchBox: true,
+                                  constraints: BoxConstraints.expand()),
+                              items: _listLocation,
+                              itemAsString: (item) => item.name.toString(),
+                              dropdownDecoratorProps: DropDownDecoratorProps(
+                                dropdownSearchDecoration: InputDecoration(
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(4),
+                                  ),
+                                  hintText: "Pilih Kabupaten/Kota",
+                                ),
+                              ),
+                              onChanged: (value) {
+                                if (value != null) {
+                                  _valCity = value.name;
+                                  _locationId = value.id;
+                                }
+                              },
+                            ),
+                            const SizedBox(height: 24),
+                            const FDText.headersH6(
+                              text: "Kontak (No. Whatsapp)",
+                              color: AppColors.neutralBlack60,
+                            ),
+                            const SizedBox(height: 12),
+                            FDTextField.normal(
+                              isNumber: true,
+                              hintText: "Masukan Kontakmu",
+                              textEditingController: _phoneController,
+                              onChanged: (data) {},
+                            ),
+                            const SizedBox(height: 40),
+                            FDButton.primary(
+                                onPressed: () {
+                                  if (_valCity != null &&
+                                      _valProvince != null) {
+                                    if (_formKey.currentState!.validate()) {
+                                      ParamScreenTwo params = ParamScreenTwo(
+                                          location: {
+                                            "locationId": _locationId!,
+                                            "province": _valProvince!,
+                                            "city": _valCity!,
+                                          },
+                                          phone: _phoneController.text,
+                                          photo: selectedImage,
+                                          university:
+                                              _universityController.text,
+                                          username: _usernameController.text);
+                                      context.pushNamed(
+                                        "complete-profile-step-2",
+                                        extra: params,
+                                      );
+                                    }
+                                  } else {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                        const SnackBar(
+                                            content: Text(
+                                                "Kota atau Provinsi tidak boleh kosong")));
+                                  }
+                                },
+                                text: "Lanjutkan"),
+                          ],
+                        ),
                       ),
                     )
                   ],

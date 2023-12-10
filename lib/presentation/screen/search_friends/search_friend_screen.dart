@@ -47,10 +47,8 @@ class _SearchFriendScreenState extends State<SearchFriendScreen> {
   List<dynamic> bMinat = [
     {"id": "0", "name": "Semua"}
   ];
-  List<UserModel> alluser = [];
   String? name;
   UserModel currentUser = const UserModel();
-  UserModel user = const UserModel();
 
   final TextEditingController _searchController = TextEditingController();
 
@@ -67,22 +65,17 @@ class _SearchFriendScreenState extends State<SearchFriendScreen> {
   Widget build(BuildContext context) {
     return MultiBlocListener(
       listeners: [
-        BlocListener<SearchFriendCubit, SearchFriendCubitState>(
-            listener: (context, state) {
-          if (state is SearchFriendCubitSuccess) {
-            setState(() {
-              alluser = state.allUser;
-            });
-          }
-        }),
         BlocListener<CurrentUserCubit, CurrentUserState>(
           listener: (context, state) {
             if (state is CurrentUserSuccess) {
+              currentUser = state.currentUser;
               bMinat.removeWhere((element) => element["name"] != "Semua");
               final listMihat = List.from(state.currentUser.interest!
                   .map((e) => {"id": e.id, "name": e.name}));
-              bMinat.addAll(listMihat);
-              idLokasi = state.currentUser.location!.locationId;
+              setState(() {
+                bMinat.addAll(listMihat);
+                idLokasi = state.currentUser.location!.locationId;
+              });
             }
           },
         ),
@@ -96,14 +89,26 @@ class _SearchFriendScreenState extends State<SearchFriendScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     _topSide(),
-                    ListView.builder(
-                      physics: const NeverScrollableScrollPhysics(),
-                      shrinkWrap: true,
-                      itemBuilder: (context, index) => _bottomSide(
-                          alluser[index].name!,
-                          alluser[index].location!.city,
-                          index),
-                      itemCount: alluser.length,
+                    BlocBuilder<SearchFriendCubit, SearchFriendCubitState>(
+                      builder: (context, state) {
+                        if (state is SearchFriendCubitLoading) {
+                          return const Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        } else if (state is SearchFriendCubitSuccess) {
+                          return ListView.builder(
+                            physics: const NeverScrollableScrollPhysics(),
+                            shrinkWrap: true,
+                            itemBuilder: (context, index) => _bottomSide(
+                                state.allUser[index].name!,
+                                state.allUser[index].location!.city,
+                                index,
+                                state.allUser),
+                            itemCount: state.allUser.length,
+                          );
+                        } else if (state is SearchFriendCubitError) {}
+                        return const SizedBox.shrink();
+                      },
                     ),
                   ])),
         ),
@@ -231,11 +236,12 @@ class _SearchFriendScreenState extends State<SearchFriendScreen> {
     );
   }
 
-  Widget _bottomSide(String name, String location, int index) {
+  Widget _bottomSide(
+      String name, String location, int index, List<UserModel> alluser) {
     return Container(
       color: AppColors.neutralwhite,
       width: double.infinity,
-      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 6),
       child: FDCard(
         borderRadius: BorderRadius.circular(12),
         padding: const EdgeInsets.all(12),
@@ -257,11 +263,13 @@ class _SearchFriendScreenState extends State<SearchFriendScreen> {
                   children: [
                     FDText.bodyP3(text: name),
                     const Spacer(),
-                    const Icon(
-                      Icons.bookmark,
-                      size: 16,
-                      color: AppColors.primaryGreen,
-                    )
+                    currentUser.friends?.contains(alluser[index].uid) ?? false
+                        ? const Icon(
+                            Icons.bookmark,
+                            size: 16,
+                            color: AppColors.primaryGreen,
+                          )
+                        : const SizedBox.shrink()
                   ],
                 ),
                 Row(
@@ -274,10 +282,25 @@ class _SearchFriendScreenState extends State<SearchFriendScreen> {
                   ],
                 ),
                 const SizedBox(height: 8),
-                FDChip.normal(
-                  color: AppColors.accentSky,
+                SizedBox(
                   height: 19,
-                  title: "UI/UX",
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: alluser[index].interest!.length,
+                    physics: const NeverScrollableScrollPhysics(),
+                    scrollDirection: Axis.horizontal,
+                    itemBuilder: (context, idx) => FDChip.normal(
+                      color: idx == 0
+                          ? AppColors.accentSky
+                          : idx == 1
+                              ? AppColors.accentGrass
+                              : AppColors.accentSunShine,
+                      height: 19,
+                      title: alluser[index].interest!.length == 1
+                          ? alluser[index].interest![0].name
+                          : alluser[index].interest![idx].name,
+                    ),
+                  ),
                 )
               ],
             ))

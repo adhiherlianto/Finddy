@@ -26,6 +26,45 @@ class UserRepository {
     }
   }
 
+  static Future<List<UserModel>> getAllFriend(List<String> friendUid) async {
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
+    List<UserModel> friends = [];
+    for (String uid in friendUid) {
+      DocumentReference userRef = firestore.collection("users").doc(uid);
+      try {
+        DocumentSnapshot userSnapshot = await userRef.get();
+
+        if (userSnapshot.exists) {
+          friends.add(
+              UserModel.fromJson(userSnapshot.data() as Map<String, dynamic>));
+        }
+      } catch (e) {
+        throw Exception(e.toString());
+      }
+    }
+    return friends;
+  }
+
+  static Future<List<UserModel>> getAllFriendRequest(
+      List<String> friendUid) async {
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
+    List<UserModel> friendRequest = [];
+    for (String uid in friendUid) {
+      DocumentReference userRef = firestore.collection("users").doc(uid);
+      try {
+        DocumentSnapshot userSnapshot = await userRef.get();
+
+        if (userSnapshot.exists) {
+          friendRequest.add(
+              UserModel.fromJson(userSnapshot.data() as Map<String, dynamic>));
+        }
+      } catch (e) {
+        throw Exception(e.toString());
+      }
+    }
+    return friendRequest;
+  }
+
   static Future<List<UserModel>> getNameSearch(String? name) async {
     List<UserModel> listAllUser = [];
     try {
@@ -137,7 +176,7 @@ class UserRepository {
           .get()
           .then((value) => value.docs);
       user = UserModel.fromJson(userLogin.first.data());
-
+      print(user.name);
       return user;
     } on FirebaseException catch (e) {
       if (kDebugMode) {
@@ -157,6 +196,7 @@ class UserRepository {
   }) async {
     try {
       await FirebaseFirestore.instance.collection("users").doc(docId).set({
+        "uid": docId,
         "email": email,
         "isVerified": isVerified,
         "name": name,
@@ -184,6 +224,10 @@ class UserRepository {
   }) async {
     try {
       await FirebaseFirestore.instance.collection("users").doc(docId).update({
+        "interest": FieldValue.delete(),
+        "pref": FieldValue.delete(),
+      });
+      await FirebaseFirestore.instance.collection("users").doc(docId).update({
         "isVerified": isVerified,
         "phone": phone,
         "photo": photo,
@@ -194,6 +238,94 @@ class UserRepository {
         "location": location,
         "interestSkill": interestSkill,
       });
+    } on FirebaseException catch (e) {
+      if (kDebugMode) {
+        print("failed with error ${e.code} : ${e.message}");
+      }
+    } catch (e) {
+      throw Exception(e.toString());
+    }
+  }
+
+  static Future<void> addFriend(String uid) async {
+    try {
+      final currentUserId = FirebaseAuth.instance.currentUser!.uid;
+      List listUid = [];
+      listUid.add(uid);
+      List listCurrentUserId = [currentUserId];
+      await FirebaseFirestore.instance
+          .collection("users")
+          .doc(currentUserId)
+          .update({"friends": FieldValue.arrayUnion(listUid)});
+      await FirebaseFirestore.instance
+          .collection("users")
+          .doc(uid)
+          .update({"friends": FieldValue.arrayUnion(listCurrentUserId)});
+    } on FirebaseException catch (e) {
+      if (kDebugMode) {
+        print("failed with error ${e.code} : ${e.message}");
+      }
+    } catch (e) {
+      throw Exception(e.toString());
+    }
+  }
+
+  static Future<void> deleteFriend(String uid) async {
+    try {
+      final currentUserId = FirebaseAuth.instance.currentUser!.uid;
+      List listUid = [];
+      listUid.add(uid);
+      List listCurrentUserId = [currentUserId];
+      await FirebaseFirestore.instance
+          .collection("users")
+          .doc(currentUserId)
+          .update({"friends": FieldValue.arrayRemove(listUid)});
+      await FirebaseFirestore.instance
+          .collection("users")
+          .doc(uid)
+          .update({"friends": FieldValue.arrayRemove(listCurrentUserId)});
+    } on FirebaseException catch (e) {
+      if (kDebugMode) {
+        print("failed with error ${e.code} : ${e.message}");
+      }
+    } catch (e) {
+      throw Exception(e.toString());
+    }
+  }
+
+  static Future<void> addFriendRequest(String uid) async {
+    try {
+      final currentUserId = FirebaseAuth.instance.currentUser!.uid;
+      List listCurrentUserId = [currentUserId];
+      await FirebaseFirestore.instance
+          .collection("users")
+          .doc(uid)
+          .update({"friendRequests": FieldValue.arrayUnion(listCurrentUserId)});
+    } on FirebaseException catch (e) {
+      if (kDebugMode) {
+        print("failed with error ${e.code} : ${e.message}");
+      }
+    } catch (e) {
+      throw Exception(e.toString());
+    }
+  }
+
+  static Future<void> deleteFriendRequest(String uid, bool? isAccept) async {
+    try {
+      final currentUserId = FirebaseAuth.instance.currentUser!.uid;
+      if (isAccept == false || isAccept == null) {
+        List listUid = [currentUserId];
+        await FirebaseFirestore.instance
+            .collection("users")
+            .doc(uid)
+            .update({"friendRequests": FieldValue.arrayRemove(listUid)});
+      } else {
+        List listUid = [uid];
+        await FirebaseFirestore.instance
+            .collection("users")
+            .doc(currentUserId)
+            .update({"friendRequests": FieldValue.arrayRemove(listUid)});
+      }
     } on FirebaseException catch (e) {
       if (kDebugMode) {
         print("failed with error ${e.code} : ${e.message}");
