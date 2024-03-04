@@ -46,7 +46,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               content: Text('Register Berhasil'),
             ),
           );
-          context.goNamed(AppRoutes.nrHome);
+          context.goNamed(AppRoutes.nrEmailVerif);
         } else if (state is RegisterError) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(

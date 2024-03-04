@@ -10,6 +10,7 @@ import 'package:finddy/presentation/screen/widget/finddy_profile_picture.dart';
 import 'package:finddy/presentation/screen/widget/finddy_text.dart';
 import 'package:finddy/presentation/theme/colors.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
@@ -143,6 +144,11 @@ class _DetailProfileScreenState extends State<DetailProfileScreen> {
               const SizedBox(width: 24),
               InkWell(
                 onTap: () {
+                  List<String> ids = [currentUser.uid!, user.uid!];
+                  ids.sort();
+                  String roomId = ids.join("_");
+                  print("room id : $roomId");
+                  FirebaseMessaging.instance.subscribeToTopic(roomId);
                   final params =
                       ChatParams(sender: user, receiver: currentUser);
                   context.pushNamed(AppRoutes.nrChatRoom, extra: params);

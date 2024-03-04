@@ -11,4 +11,6 @@ abstract class AppRoutes {
   static const String nrFriendRequest = "friend-request";
   static const String nrChatRoom = "chat-room";
   static const String nrChatFile = "chat-file";
+  static const String nrJitsi = "jitsi";
+  static const String nrEmailVerif = "email-verif";
 }

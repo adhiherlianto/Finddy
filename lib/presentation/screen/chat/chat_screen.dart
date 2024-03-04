@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:finddy/domain/repositories/chat/chat_repositories.dart';
+import 'package:finddy/domain/repositories/chat/notification_service.dart';
 import 'package:finddy/presentation/navigation/app_routes.dart';
 import 'package:finddy/presentation/screen/chat/file_page_params.dart';
 import 'package:finddy/presentation/screen/chat/widget/chat_bubble.dart';
@@ -19,6 +20,7 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 class ChatScreen extends StatefulWidget {
+  static const routeName = '/chatPage';
   final ChatParams params;
   const ChatScreen({super.key, required this.params});
 
@@ -27,10 +29,13 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen> {
+  final NotificationService _notificationService = NotificationService();
   String? orientation;
   @override
   void initState() {
     super.initState();
+    print(widget.params.sender.uid);
+    print(widget.params.receiver.uid);
   }
 
   String sort(String senderId, String receiverId) {
@@ -67,6 +72,7 @@ class _ChatScreenState extends State<ChatScreen> {
   final ChatRepositories _chatRepositories = ChatRepositories();
   @override
   Widget build(BuildContext context) {
+    // final args = ModalRoute.of(context)!.settings.arguments as ChatParams;
     return Scaffold(
       backgroundColor: AppColors.primaryLightBlue,
       appBar: PreferredSize(
@@ -232,8 +238,10 @@ class _ChatScreenState extends State<ChatScreen> {
             ),
           ),
           ElevatedButton(
-            onPressed: () {
+            onPressed: () async {
               if (_messageController.text != "") {
+                String roomId = sort(
+                    widget.params.sender.uid!, widget.params.receiver.uid!);
                 ChatRepositories.postLastChats(
                     widget.params.receiver,
                     widget.params.sender,
@@ -243,6 +251,8 @@ class _ChatScreenState extends State<ChatScreen> {
                       widget.params.receiver.uid!,
                       _messageController.text,
                     );
+                await _notificationService.sendNotif(_messageController.text,
+                    widget.params.receiver, widget.params.sender, roomId);
                 _messageController.clear();
               }
             },

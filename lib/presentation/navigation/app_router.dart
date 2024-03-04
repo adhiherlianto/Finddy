@@ -1,5 +1,6 @@
 import 'package:finddy/globals.dart';
 import 'package:finddy/presentation/navigation/app_routes.dart';
+import 'package:finddy/presentation/screen/auth/email_verification.dart';
 import 'package:finddy/presentation/screen/auth/login_screen.dart';
 import 'package:finddy/presentation/screen/chat/chat_params.dart';
 import 'package:finddy/presentation/screen/chat/chat_screen.dart';
@@ -14,6 +15,7 @@ import 'package:finddy/presentation/screen/detail_and_edit_profile/detail_profil
 import 'package:finddy/presentation/screen/detail_and_edit_profile/detail_profile_screen.dart';
 import 'package:finddy/presentation/screen/friend_request/friend_request_screen.dart';
 import 'package:finddy/presentation/screen/home/home_screen.dart';
+import 'package:finddy/presentation/screen/jitsi/jitsi_form.dart';
 import 'package:finddy/presentation/screen/onboarding/onboarding_screen.dart';
 import 'package:finddy/presentation/screen/register/register_screen.dart';
 import 'package:finddy/presentation/screen/splash/splash_screen.dart';
@@ -97,5 +99,10 @@ final GoRouter fdGlobalRouter = GoRouter(
           FilePageParams params = state.extra as FilePageParams;
           return FilePage(params: params);
         },
+      ),
+      GoRoute(
+        path: '/email-verif',
+        name: AppRoutes.nrEmailVerif,
+        builder: (context, state) => const EmailVerification(),
       ),
     ]);

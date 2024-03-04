@@ -1,3 +1,4 @@
+import 'package:finddy/domain/repositories/chat/notification_service.dart';
 import 'package:finddy/presentation/navigation/app_router.dart';
 import 'package:finddy/presentation/screen/auth/cubit/auth_cubit.dart';
 import 'package:finddy/presentation/screen/chat/cubit/chat_cubit.dart';
@@ -17,10 +18,17 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:device_preview/device_preview.dart';
+import 'package:flutter/services.dart';
 
+final navigatorKey = GlobalKey<NavigatorState>();
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+  ]);
   await Firebase.initializeApp();
+  await NotificationService().initNotification();
+
   runApp(DevicePreview(
     builder: (context) => const MyApp(),
     enabled: false,
@@ -83,10 +91,11 @@ class MyApp extends StatelessWidget {
           routeInformationParser: fdGlobalRouter.routeInformationParser,
           routerDelegate: fdGlobalRouter.routerDelegate,
           theme: ThemeData(
+              useMaterial3: false,
               pageTransitionsTheme: const PageTransitionsTheme(builders: {
-            TargetPlatform.android: FadeUpwardsPageTransitionsBuilder(),
-            TargetPlatform.iOS: FadeUpwardsPageTransitionsBuilder()
-          })),
+                TargetPlatform.android: FadeUpwardsPageTransitionsBuilder(),
+                TargetPlatform.iOS: FadeUpwardsPageTransitionsBuilder()
+              })),
           title: "Finddy",
         ),
       ),

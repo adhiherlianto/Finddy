@@ -4,6 +4,7 @@ import 'package:finddy/presentation/screen/chat/chat_params.dart';
 import 'package:finddy/presentation/screen/chat/cubit/chat_cubit.dart';
 import 'package:finddy/presentation/screen/main_screen/cubit/current_user_cubit.dart';
 import 'package:finddy/presentation/screen/widget/finddy_empty.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -26,6 +27,8 @@ class MessageScreen extends StatefulWidget {
 class _MessageScreenState extends State<MessageScreen> {
   @override
   void initState() {
+    final userEmail = FirebaseAuth.instance.currentUser!.email;
+    context.read<CurrentUserCubit>().getCurrentUser(userEmail!);
     context.read<ChatCubit>().getLastMessage();
     super.initState();
   }

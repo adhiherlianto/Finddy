@@ -61,7 +61,7 @@ class _LoginLayoutState extends State<LoginLayout> {
               content: Text('Login Success'),
             ),
           );
-          context.goNamed(AppRoutes.nrHome);
+          context.goNamed(AppRoutes.nrEmailVerif);
         } else if (state is LoginError) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
@@ -115,9 +115,7 @@ class _LoginLayoutState extends State<LoginLayout> {
                   FDTextField.password(
                     hintText: "Masukkan kata sandi kamu",
                     textEditingController: _passwordController,
-                    onChanged: (data) {
-                      print("dataPassword : $data");
-                    },
+                    onChanged: (data) {},
                     icon: textfieldPw
                         ? const Icon(Icons.visibility_off)
                         : const Icon(Icons.visibility),
