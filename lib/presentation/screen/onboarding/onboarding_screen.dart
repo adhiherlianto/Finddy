@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:finddy/presentation/navigation/app_routes.dart';
 import 'package:finddy/presentation/screen/widget/finddy_button.dart';
@@ -24,17 +26,17 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     DataSlider(
         title: "Temukan teman belajar lebih mudah!",
         desc:
-            "Lorem ipsum dolor sit ametconsectetur adipiscing elit. Proin sollicitudin, libero quis pulvinar interdum, urna massa faucibus mauris, in gravida elit nibh eu tortor.",
+            "Finddy, tempat di mana Anda dapat mencari inspirasi belajar melalui koneksi dengan teman-teman sekelas yang berbeda minat akademisnya. Aplikasi ini memberikan pengalaman berharga dengan fitur tambah teman, chat, dan motivasi belajar yang luar biasa",
         icon: 'assets/images/reason_1.png'),
     DataSlider(
-        title: "Temukan teman belajar lebih mudah 2!",
+        title: "Motivasi Belajar Menjadi Pemacu Semangat",
         desc:
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin sollicitudin, libero quis pulvinar interdum, urna massa faucibus mauris, in gravida elit nibh eu tortor.",
+            "Dengan Finddy, tidak hanya teman belajar yang Anda temukan, tetapi juga teman seperjalanan yang dapat memberikan dukungan dan semangat. Nikmati layanan chatting yang nyaman, tambahkan teman dengan mudah, dan temukan motivasi belajar yang unik sesuai dengan kebutuhan Anda.",
         icon: 'assets/images/reason_2.png'),
     DataSlider(
-        title: "Temukan teman belajar lebih mudah 3!",
+        title: "Berkomunikasi dengan teman menjadi lebih mudah",
         desc:
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin sollicitudin, libero quis pulvinar interdum, urna massa faucibus mauris, in gravida elit nibh eu tortor.",
+            "Sambut kegembiraan belajar dengan Finddy! Tambah teman sejalan dengan minat akademis Anda, terhubung melalui fitur chat yang ramah, dan biarkan motivasi belajar kami menjadi pendorong kesuksesan Anda. Jelajahi peluang baru, belajarlah bersama, dan raih prestasi luar biasa dalam perjalanan pendidikan Anda!",
         icon: 'assets/images/reason_3.png'),
   ];
 
@@ -57,6 +59,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           FinddyLogo(size: 40),
           const SizedBox(height: 80),
           _carouselPages(),
+          const SizedBox(height: 20),
           _dotIndicator(),
           _buttonCarousel(),
         ]),
@@ -85,9 +88,12 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 24),
-                  FDText.bodyP2(
-                    text: data[index].desc,
-                    // text: 'test',
+                  Expanded(
+                    child: FDText.bodyP2(
+                      text: data[index].desc,
+                      textAlign: TextAlign.center,
+                      // text: 'test',
+                    ),
                   )
                 ],
               ),

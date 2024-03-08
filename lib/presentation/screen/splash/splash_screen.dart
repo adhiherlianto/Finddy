@@ -24,7 +24,7 @@ class _SplashScreenState extends State<SplashScreen> {
     return BlocListener<SplashCubit, SplashState>(
       listener: (context, state) {
         if (state is SplashSuccess) {
-          context.goNamed(AppRoutes.nrHome);
+          context.goNamed(AppRoutes.nrEmailVerif);
         } else if (state is SplashError && state.check == false) {
           context.goNamed(AppRoutes.nrOnBoarding);
         } else {

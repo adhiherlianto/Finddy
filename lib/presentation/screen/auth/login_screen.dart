@@ -48,6 +48,7 @@ class _LoginLayoutState extends State<LoginLayout> {
   }
 
   bool textfieldPw = false;
+  final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -60,7 +61,7 @@ class _LoginLayoutState extends State<LoginLayout> {
               content: Text('Login Success'),
             ),
           );
-          context.pushNamed(AppRoutes.nrHome);
+          context.goNamed(AppRoutes.nrEmailVerif);
         } else if (state is LoginError) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
@@ -75,76 +76,80 @@ class _LoginLayoutState extends State<LoginLayout> {
         body: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.all(24),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                FinddyLogo(size: 40.0),
-                const SizedBox(height: 40),
-                const FDText.headersH3(
-                  text: "initial",
-                  color: AppColors.neutralBlack80,
-                ),
-                const SizedBox(height: 12),
-                const FDText.bodyP3(
-                  text: "Mulai temukan teman belajarmu di sini!",
-                  color: AppColors.neutralBlack60,
-                ),
-                const SizedBox(height: 78),
-                const FDText.headersH6(
-                  text: "Email",
-                  color: AppColors.neutralBlack60,
-                ),
-                const SizedBox(height: 12),
-                FDTextField.normal(
-                  hintText: "Masukan email kamu",
-                  textEditingController: _emailController,
-                  onChanged: (data) {
-                    print("dataEmail : $data");
-                  },
-                ),
-                const SizedBox(height: 24),
-                const FDText.headersH6(
-                  text: "Password",
-                  color: AppColors.neutralBlack60,
-                ),
-                const SizedBox(height: 12),
-                FDTextField.password(
-                  hintText: "Masukkan kata sandi kamu",
-                  textEditingController: _passwordController,
-                  onChanged: (data) {
-                    print("dataPassword : $data");
-                  },
-                  icon: textfieldPw
-                      ? const Icon(Icons.visibility_off)
-                      : const Icon(Icons.visibility),
-                  isVisible: textfieldPw,
-                  onPressed: () {
-                    setState(() {
-                      textfieldPw = !textfieldPw;
-                    });
-                  },
-                ),
-                const SizedBox(height: 40),
-                FDButton.primary(
-                    onPressed: () {
-                      context.read<AuthCubit>().loginUser(
-                          _emailController.text, _passwordController.text);
-                    },
-                    text: "Login"),
-                const SizedBox(height: 60),
-                const Center(
-                  child: FDText.bodyP3(
-                    text: "Belum punya akun?",
+            child: Form(
+              key: _formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  FinddyLogo(size: 40.0),
+                  const SizedBox(height: 40),
+                  const FDText.headersH3(
+                    text: "Selamat datang kembali!",
+                    color: AppColors.neutralBlack80,
+                  ),
+                  const SizedBox(height: 12),
+                  const FDText.bodyP3(
+                    text: "Mulai temukan teman belajarmu di sini!",
                     color: AppColors.neutralBlack60,
                   ),
-                ),
-                const SizedBox(height: 12),
-                FDButton.secondary(
-                    onPressed: () {
-                      context.pushNamed(AppRoutes.nrRegister);
+                  const SizedBox(height: 78),
+                  const FDText.headersH6(
+                    text: "Email",
+                    color: AppColors.neutralBlack60,
+                  ),
+                  const SizedBox(height: 12),
+                  FDTextField.normal(
+                    isEmail: true,
+                    hintText: "Masukan email kamu",
+                    textEditingController: _emailController,
+                    onChanged: (data) {
+                      print("dataEmail : $data");
                     },
-                    text: "Registrasi Sekarang")
-              ],
+                  ),
+                  const SizedBox(height: 24),
+                  const FDText.headersH6(
+                    text: "Password",
+                    color: AppColors.neutralBlack60,
+                  ),
+                  const SizedBox(height: 12),
+                  FDTextField.password(
+                    hintText: "Masukkan kata sandi kamu",
+                    textEditingController: _passwordController,
+                    onChanged: (data) {},
+                    icon: textfieldPw
+                        ? const Icon(Icons.visibility_off)
+                        : const Icon(Icons.visibility),
+                    isVisible: textfieldPw,
+                    onPressed: () {
+                      setState(() {
+                        textfieldPw = !textfieldPw;
+                      });
+                    },
+                  ),
+                  const SizedBox(height: 40),
+                  FDButton.primary(
+                      onPressed: () {
+                        if (_formKey.currentState!.validate()) {
+                          context.read<AuthCubit>().loginUser(
+                              _emailController.text, _passwordController.text);
+                        }
+                      },
+                      text: "Login"),
+                  const SizedBox(height: 60),
+                  const Center(
+                    child: FDText.bodyP3(
+                      text: "Belum punya akun?",
+                      color: AppColors.neutralBlack60,
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  FDButton.secondary(
+                      onPressed: () {
+                        context.pushNamed(AppRoutes.nrRegister);
+                      },
+                      text: "Registrasi Sekarang")
+                ],
+              ),
             ),
           ),
         ),

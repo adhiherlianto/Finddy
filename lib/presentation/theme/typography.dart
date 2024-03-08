@@ -18,6 +18,14 @@ class AppTextStyles {
       decoration: TextDecoration.none,
       leadingDistribution: TextLeadingDistribution.even,
       height: 1.35);
+  static const headersH8 = TextStyle(
+      fontFamily: "PlusJakartaSans",
+      fontWeight: FontWeight.w700,
+      fontStyle: FontStyle.normal,
+      fontSize: 10,
+      decoration: TextDecoration.none,
+      leadingDistribution: TextLeadingDistribution.even,
+      height: 1.35);
 
   static const headersH4 = TextStyle(
       fontFamily: "PlusJakartaSans",
@@ -39,7 +47,7 @@ class AppTextStyles {
 
   static const bodyP3 = TextStyle(
       fontFamily: "PlusJakartaSans",
-      fontWeight: FontWeight.w400,
+      fontWeight: FontWeight.w700,
       fontStyle: FontStyle.normal,
       fontSize: 14,
       decoration: TextDecoration.none,

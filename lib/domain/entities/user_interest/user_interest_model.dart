@@ -4,9 +4,9 @@ part 'user_interest_model.g.dart';
 
 @JsonSerializable()
 class UserInterestModel {
-  final String id, name, skill;
+  final String id, name;
 
-  UserInterestModel(this.id, this.name, this.skill);
+  UserInterestModel(this.id, this.name);
 
   factory UserInterestModel.fromJson(Map<String, dynamic> json) =>
       _$UserInterestModelFromJson(json);

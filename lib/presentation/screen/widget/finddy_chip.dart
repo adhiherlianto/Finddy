@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 
 class FDChip extends StatelessWidget {
   final Color color;
-  final double height;
+  final double? height;
+  final double? width;
   final String title;
   Color? textColor;
   EdgeInsetsGeometry? padding;
@@ -16,7 +17,8 @@ class FDChip extends StatelessWidget {
   FDChip.normal(
       {Key? key,
       required this.color,
-      required this.height,
+      this.height,
+      this.width,
       required this.title,
       this.textColor,
       this.padding,
@@ -28,6 +30,7 @@ class FDChip extends StatelessWidget {
       {Key? key,
       required this.color,
       required this.height,
+      this.width,
       required this.title,
       this.textColor,
       this.padding,

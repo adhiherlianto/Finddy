@@ -10,7 +10,9 @@ class FDTextField extends StatelessWidget {
   Widget? icon;
   bool isVisible;
   bool isNumber;
+  bool? isEmail;
   VoidCallback? onPressed;
+  final String? Function(String? value)? validation;
 
   FDTextField.normal({
     Key? key,
@@ -21,7 +23,9 @@ class FDTextField extends StatelessWidget {
     this.isNumber = false,
     this.typeTextField = TypeTextField.normal,
     this.icon,
+    this.isEmail,
     this.onPressed,
+    this.validation,
   }) : super(key: key);
 
   FDTextField.password(
@@ -33,12 +37,35 @@ class FDTextField extends StatelessWidget {
       required this.isVisible,
       this.isNumber = false,
       this.typeTextField = TypeTextField.password,
-      required this.onPressed})
+      required this.onPressed,
+      this.validation})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      validator: validation ??
+          (value) {
+            if (value == null || value.isEmpty) {
+              return "Textfield tidak boleh kosong";
+            } else if (isEmail == true) {
+              final bool emailValid = RegExp(
+                      r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                  .hasMatch(value);
+              if (emailValid == false) {
+                return "Email tidak valid";
+              }
+            } else if (isNumber == true) {
+              String patttern = r'(^(?:[+0]9)?[0-9]{10,12}$)';
+              RegExp regExp = RegExp(patttern);
+              if (value.isEmpty) {
+                return 'Textfield tidak boleh kosong';
+              } else if (!regExp.hasMatch(value)) {
+                return 'Nomor telepon tidak valid';
+              }
+            }
+            return null;
+          },
       controller: textEditingController,
       onChanged: onChanged,
       keyboardType: isNumber ? TextInputType.number : TextInputType.text,

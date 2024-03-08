@@ -7,17 +7,30 @@ abstract class CompleteProfileState extends Equatable {
   List<Object> get props => [];
 }
 
-class CompleteProfileInitial extends CompleteProfileState {}
+class GetLocationInitial extends CompleteProfileState {}
 
-class CompleteProfileLoading extends CompleteProfileState {}
+class GetLocationLoading extends CompleteProfileState {}
 
-class CompleteProfileSuccess extends CompleteProfileState {
-  List<LocationModel> location;
+class GetLocationSuccess extends CompleteProfileState {
+  final List<LocationModel> location;
 
-  CompleteProfileSuccess(this.location);
+  const GetLocationSuccess(this.location);
 
   @override
   List<Object> get props => [location];
 }
 
-class CompleteProfileError extends CompleteProfileState {}
+class GetLocationError extends CompleteProfileState {}
+
+class GetProvinceLoading extends CompleteProfileState {}
+
+class GetProvinceSuccess extends CompleteProfileState {
+  final List<String> province;
+
+  const GetProvinceSuccess(this.province);
+
+  @override
+  List<Object> get props => [province];
+}
+
+class GetProvinceError extends CompleteProfileState {}

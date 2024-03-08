@@ -101,6 +101,16 @@ class FDText extends StatelessWidget {
       this.color = AppColors.neutralBlack80})
       : super(key: key);
 
+  const FDText.headersH8(
+      {Key? key,
+      required this.text,
+      this.textStyle = AppTextStyles.headersH8,
+      this.textAlign,
+      this.overflow,
+      this.maxLines,
+      this.color = AppColors.neutralBlack80})
+      : super(key: key);
+
   const FDText.onBoarding(
       {Key? key,
       required this.text,

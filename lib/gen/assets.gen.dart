@@ -95,6 +95,10 @@ class $AssetsImagesGen {
   AssetGenImage get imgFindyLogo =>
       const AssetGenImage('assets/images/img_findy_logo.png');
 
+  /// File path: assets/images/img_icon.png
+  AssetGenImage get imgIcon =>
+      const AssetGenImage('assets/images/img_icon.png');
+
   /// File path: assets/images/onboarding_background.png
   AssetGenImage get onboardingBackground =>
       const AssetGenImage('assets/images/onboarding_background.png');
@@ -128,6 +132,7 @@ class $AssetsImagesGen {
         emptyProfile,
         imgContent,
         imgFindyLogo,
+        imgIcon,
         onboardingBackground,
         profile,
         reason1,
